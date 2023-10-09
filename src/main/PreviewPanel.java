@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -155,6 +156,7 @@ public class PreviewPanel extends javax.swing.JPanel {
         protected void paintComponent(Graphics g) {
             if (matriz != null) {
                 super.paintComponent(g);
+                Rectangle areaVisible = drawPreview.getVisibleRect();
                 this.setBackground(new Color(244, 244, 244));
                 this.filas = matriz.length;
                 this.columnas = matriz[0].length;
@@ -164,8 +166,10 @@ public class PreviewPanel extends javax.swing.JPanel {
                         int x = (int) (i * (tamañoCelda + separacionCeldas) * zoom) - offsetX;
                         int y = (int) (j * (tamañoCelda + separacionCeldas) * zoom) - offsetY;
 
-                        g.setColor(matriz[i][j].getColor());
-                        g.fillRect(x, y, (int) (tamañoCelda * zoom), (int) (tamañoCelda * zoom));
+                        if (areaVisible.intersects(x, y, (tamañoCelda * zoom), (tamañoCelda * zoom))) {
+                            g.setColor(matriz[i][j].getColor());
+                            g.fillRect(x, y, (int) (tamañoCelda * zoom), (int) (tamañoCelda * zoom));
+                        }
                     }
                 }
             }

@@ -11,7 +11,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     public void iniciar() {
-        this.matriz = new int[100][100];
+        this.matriz = new int[1000][1000];
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[0].length; j++) {
                 matriz[i][j] = 1;
