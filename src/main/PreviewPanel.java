@@ -2,6 +2,7 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -25,8 +26,8 @@ public class PreviewPanel extends javax.swing.JPanel {
     private JButton zoomOutButton;
     private JPanel pnlBotones;
 
-    private Point puntoInicio; // Almacena la posición de inicio del arrastre
-    private Point puntoFin;   // Almacena la posición de fin del arrastre
+    private Point puntoInicio; // Punto de inicio del arrastre
+    private Point puntoFin;   // Punto de del fin del arrastre
     private int offsetX = 0;
     private int offsetY = 0;
 
@@ -157,7 +158,7 @@ public class PreviewPanel extends javax.swing.JPanel {
             if (matriz != null) {
                 super.paintComponent(g);
                 Rectangle areaVisible = drawPreview.getVisibleRect();
-                this.setBackground(new Color(244, 244, 244));
+                this.setBackground(new Color(255, 255, 255));
                 this.filas = matriz.length;
                 this.columnas = matriz[0].length;
 
@@ -169,6 +170,14 @@ public class PreviewPanel extends javax.swing.JPanel {
                         if (areaVisible.intersects(x, y, (tamañoCelda * zoom), (tamañoCelda * zoom))) {
                             g.setColor(matriz[i][j].getColor());
                             g.fillRect(x, y, (int) (tamañoCelda * zoom), (int) (tamañoCelda * zoom));
+
+                            if (zoom >= 8.0) {
+                                g.setColor(Color.BLACK);
+                                g.setFont(new Font("TimesRoman", Font.BOLD, (int) (2 * zoom)));
+                                g.drawString(String.valueOf(matriz[i][j].getValor()), 
+                                        (int) (x + (tamañoCelda * zoom) / 2) - 3, 
+                                        (int) (y + (tamañoCelda * zoom) / 2) + 7);
+                            }
                         }
                     }
                 }
