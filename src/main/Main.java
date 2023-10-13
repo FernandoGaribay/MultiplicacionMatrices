@@ -1,147 +1,138 @@
 package main;
 
-import java.util.Random;
-
 public class Main extends javax.swing.JFrame {
 
     private int[][] matriz;
 
     public Main() {
         initComponents();
-        iniciar();
         
-    }
-
-    public void iniciar() {
-//        this.matriz = new int[1000][1000];
-//        for (int i = 0; i < matriz.length; i++) {
-//            for (int j = 0; j < matriz[0].length; j++) {
-//                matriz[i][j] = new Random().nextInt(10);
-//            }
-//        }
-//        this.pnlPreviewMatriz.setMatriz(matriz);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
+        btnGroupAlgoritmos = new javax.swing.ButtonGroup();
+        background = new javax.swing.JPanel();
         pnlPreviewMatriz = new main.PreviewPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jSlider1 = new javax.swing.JSlider();
-        jPanel6 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        btnGenA = new javax.swing.JButton();
-        jPanel8 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        pnlLateral = new javax.swing.JPanel();
+        pnlAlgoritmos = new javax.swing.JPanel();
+        radioSecuencial = new javax.swing.JRadioButton();
+        radioCannon = new javax.swing.JRadioButton();
+        radioStrassen = new javax.swing.JRadioButton();
+        pnlMonitor = new javax.swing.JPanel();
+        lblNumHilos = new javax.swing.JLabel();
+        sliderNumHilos = new javax.swing.JSlider();
+        pnlContenedorHilos = new javax.swing.JPanel();
+        pnlConfiguracion = new javax.swing.JPanel();
+        btnGenMatrizB = new javax.swing.JButton();
+        btnGenMatrizA = new javax.swing.JButton();
+        pnlMatrizB = new javax.swing.JPanel();
+        pnlMatrizA = new javax.swing.JPanel();
+        btnAplicarCambios = new javax.swing.JButton();
+        btnComenzar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(null);
-        jPanel1.add(pnlPreviewMatriz);
+        background.setBackground(new java.awt.Color(255, 255, 255));
+        background.setLayout(null);
+        background.add(pnlPreviewMatriz);
         pnlPreviewMatriz.setBounds(10, 10, 800, 835);
 
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlLateral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Algoritmos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlAlgoritmos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Algoritmos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlAlgoritmos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jRadioButton2.setText("Procesamiento Secuencial");
-        jPanel3.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 35, 300, -1));
+        btnGroupAlgoritmos.add(radioSecuencial);
+        radioSecuencial.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        radioSecuencial.setText("Procesamiento Secuencial");
+        pnlAlgoritmos.add(radioSecuencial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 300, -1));
 
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jRadioButton1.setText("Algoritmo de Cannon");
-        jPanel3.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 115, 300, -1));
+        btnGroupAlgoritmos.add(radioCannon);
+        radioCannon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        radioCannon.setText("Algoritmo de Cannon");
+        pnlAlgoritmos.add(radioCannon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 300, -1));
 
-        jRadioButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jRadioButton3.setText("Por bloques (Strassen)");
-        jPanel3.add(jRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 75, 300, -1));
+        btnGroupAlgoritmos.add(radioStrassen);
+        radioStrassen.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        radioStrassen.setText("Por bloques (Strassen)");
+        pnlAlgoritmos.add(radioStrassen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 300, -1));
 
-        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 160));
+        pnlLateral.add(pnlAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 160));
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Monitor", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlMonitor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Monitor", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlMonitor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel1.setText("Numero de hilos: 2");
-        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 290, 30));
+        lblNumHilos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblNumHilos.setText("Numero de hilos: 2");
+        pnlMonitor.add(lblNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 290, 30));
 
-        jSlider1.setMajorTickSpacing(2);
-        jSlider1.setMaximum(20);
-        jSlider1.setMinimum(1);
-        jSlider1.setPaintLabels(true);
-        jSlider1.setPaintTicks(true);
-        jSlider1.setValue(2);
-        jSlider1.setFocusable(false);
-        jPanel4.add(jSlider1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 290, -1));
+        sliderNumHilos.setMajorTickSpacing(2);
+        sliderNumHilos.setMaximum(20);
+        sliderNumHilos.setMinimum(1);
+        sliderNumHilos.setPaintLabels(true);
+        sliderNumHilos.setPaintTicks(true);
+        sliderNumHilos.setValue(2);
+        sliderNumHilos.setFocusable(false);
+        pnlMonitor.add(sliderNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 290, -1));
 
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 290, 100));
+        pnlContenedorHilos.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMonitor.add(pnlContenedorHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 290, 100));
 
-        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 330, 250));
+        pnlLateral.add(pnlMonitor, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 330, 250));
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuracion", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlConfiguracion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuracion", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlConfiguracion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton2.setText("Generar Matriz B");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnGenMatrizB.setText("Generar Matriz B");
+        btnGenMatrizB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnGenMatrizBActionPerformed(evt);
             }
         });
-        jPanel5.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 135, 30));
+        pnlConfiguracion.add(btnGenMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 135, 30));
 
-        btnGenA.setText("Generar Matriz A");
-        btnGenA.addActionListener(new java.awt.event.ActionListener() {
+        btnGenMatrizA.setText("Generar Matriz A");
+        btnGenMatrizA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenAActionPerformed(evt);
+                btnGenMatrizAActionPerformed(evt);
             }
         });
-        jPanel5.add(btnGenA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 135, 30));
+        pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 135, 30));
 
-        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 135, 135));
+        pnlMatrizB.setBackground(new java.awt.Color(255, 255, 255));
+        pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 135, 135));
 
-        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 135, 135));
+        pnlMatrizA.setBackground(new java.awt.Color(255, 255, 255));
+        pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 135, 135));
 
-        jButton1.setText("Aplicar cambios");
-        jPanel5.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 295, 30));
+        btnAplicarCambios.setText("Aplicar cambios");
+        pnlConfiguracion.add(btnAplicarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 295, 30));
 
-        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 330, 290));
+        pnlLateral.add(pnlConfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 330, 290));
 
-        jButton4.setText("Comenzar");
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 773, 350, 50));
+        btnComenzar.setText("Comenzar");
+        pnlLateral.add(btnComenzar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 773, 350, 50));
 
-        jPanel1.add(jPanel2);
-        jPanel2.setBounds(820, 10, 370, 835);
+        background.add(pnlLateral);
+        pnlLateral.setBounds(820, 10, 370, 835);
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 900));
+        getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 900));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnGenMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizBActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnGenMatrizBActionPerformed
 
-    private void btnGenAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenAActionPerformed
+    private void btnGenMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizAActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnGenAActionPerformed
+    }//GEN-LAST:event_btnGenMatrizAActionPerformed
 
     public static void main(String args[]) {
 
@@ -172,24 +163,24 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGenA;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JSlider jSlider1;
+    private javax.swing.JPanel background;
+    private javax.swing.JButton btnAplicarCambios;
+    private javax.swing.JButton btnComenzar;
+    private javax.swing.JButton btnGenMatrizA;
+    private javax.swing.JButton btnGenMatrizB;
+    private javax.swing.ButtonGroup btnGroupAlgoritmos;
+    private javax.swing.JLabel lblNumHilos;
+    private javax.swing.JPanel pnlAlgoritmos;
+    private javax.swing.JPanel pnlConfiguracion;
+    private javax.swing.JPanel pnlContenedorHilos;
+    private javax.swing.JPanel pnlLateral;
+    private javax.swing.JPanel pnlMatrizA;
+    private javax.swing.JPanel pnlMatrizB;
+    private javax.swing.JPanel pnlMonitor;
     private main.PreviewPanel pnlPreviewMatriz;
+    private javax.swing.JRadioButton radioCannon;
+    private javax.swing.JRadioButton radioSecuencial;
+    private javax.swing.JRadioButton radioStrassen;
+    private javax.swing.JSlider sliderNumHilos;
     // End of variables declaration//GEN-END:variables
 }
