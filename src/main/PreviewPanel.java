@@ -2,6 +2,7 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -276,6 +277,8 @@ public class PreviewPanel extends javax.swing.JPanel {
 
             configButton.setFocusPainted(false);
             
+            configButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            
             izquierda.setBackground(new Color(153, 219, 254));
             izquierda.add(configButton);
         }
@@ -295,6 +298,10 @@ public class PreviewPanel extends javax.swing.JPanel {
             centerButton.setFocusPainted(false);
             zoomOutButton.setFocusPainted(false);
 
+            zoomInButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            centerButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            zoomOutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            
             centrar.setBackground(new Color(153, 219, 254));
             centrar.add(zoomInButton);
             centrar.add(centerButton);

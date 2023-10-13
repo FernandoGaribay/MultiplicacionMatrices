@@ -49,16 +49,22 @@ public class Main extends javax.swing.JFrame {
         btnGroupAlgoritmos.add(radioSecuencial);
         radioSecuencial.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         radioSecuencial.setText("Procesamiento Secuencial");
+        radioSecuencial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        radioSecuencial.setFocusPainted(false);
         pnlAlgoritmos.add(radioSecuencial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 300, -1));
 
         btnGroupAlgoritmos.add(radioCannon);
         radioCannon.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         radioCannon.setText("Algoritmo de Cannon");
+        radioCannon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        radioCannon.setFocusPainted(false);
         pnlAlgoritmos.add(radioCannon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 300, -1));
 
         btnGroupAlgoritmos.add(radioStrassen);
         radioStrassen.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         radioStrassen.setText("Por bloques (Strassen)");
+        radioStrassen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        radioStrassen.setFocusPainted(false);
         pnlAlgoritmos.add(radioStrassen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 300, -1));
 
         pnlLateral.add(pnlAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 160));
@@ -76,7 +82,18 @@ public class Main extends javax.swing.JFrame {
         sliderNumHilos.setPaintLabels(true);
         sliderNumHilos.setPaintTicks(true);
         sliderNumHilos.setValue(2);
+        sliderNumHilos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         sliderNumHilos.setFocusable(false);
+        sliderNumHilos.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderNumHilosStateChanged(evt);
+            }
+        });
+        sliderNumHilos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                sliderNumHilosMouseReleased(evt);
+            }
+        });
         pnlMonitor.add(sliderNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 290, -1));
 
         pnlContenedorHilos.setBackground(new java.awt.Color(255, 255, 255));
@@ -88,6 +105,8 @@ public class Main extends javax.swing.JFrame {
         pnlConfiguracion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnGenMatrizB.setText("Generar Matriz B");
+        btnGenMatrizB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGenMatrizB.setFocusPainted(false);
         btnGenMatrizB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenMatrizBActionPerformed(evt);
@@ -96,6 +115,8 @@ public class Main extends javax.swing.JFrame {
         pnlConfiguracion.add(btnGenMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 135, 30));
 
         btnGenMatrizA.setText("Generar Matriz A");
+        btnGenMatrizA.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGenMatrizA.setFocusPainted(false);
         btnGenMatrizA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenMatrizAActionPerformed(evt);
@@ -110,11 +131,15 @@ public class Main extends javax.swing.JFrame {
         pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 135, 135));
 
         btnAplicarCambios.setText("Aplicar cambios");
+        btnAplicarCambios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAplicarCambios.setFocusPainted(false);
         pnlConfiguracion.add(btnAplicarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 295, 30));
 
         pnlLateral.add(pnlConfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 330, 290));
 
         btnComenzar.setText("Comenzar");
+        btnComenzar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnComenzar.setFocusPainted(false);
         pnlLateral.add(btnComenzar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 773, 350, 50));
 
         background.add(pnlLateral);
@@ -133,6 +158,14 @@ public class Main extends javax.swing.JFrame {
     private void btnGenMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizAActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGenMatrizAActionPerformed
+
+    private void sliderNumHilosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderNumHilosStateChanged
+        this.lblNumHilos.setText("Numero de hilos: " + sliderNumHilos.getValue());
+    }//GEN-LAST:event_sliderNumHilosStateChanged
+
+    private void sliderNumHilosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderNumHilosMouseReleased
+        System.out.println("Numero de hilos establecido a: " + sliderNumHilos.getValue());
+    }//GEN-LAST:event_sliderNumHilosMouseReleased
 
     public static void main(String args[]) {
 
