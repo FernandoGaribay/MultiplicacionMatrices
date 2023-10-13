@@ -23,6 +23,7 @@ public class PreviewPanel extends javax.swing.JPanel {
     private Celda[][] matriz;
 
     private JButton zoomInButton;
+    private JButton centerButton;
     private JButton zoomOutButton;
     private JPanel pnlBotones;
 
@@ -31,17 +32,43 @@ public class PreviewPanel extends javax.swing.JPanel {
     private int offsetX = 0;
     private int offsetY = 0;
 
+    private int tamañoCelda = 5;
+    private int separacionCeldas = 2;
+
     // <editor-fold defaultstate="collapsed" desc="Constructor e inicializadores"> 
     public PreviewPanel() {
         initComponents();
+        initGraficos();
         initControles();
         initEventos();
 
         this.add(drawPreview, BorderLayout.CENTER);
     }
 
-    private void initEventos() {
+    private void initGraficos() {
         this.drawPreview = new drawPreview();
+        this.matriz = new Celda[150][150];
+
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[0].length; j++) {
+                this.matriz[i][j] = new Celda(new Color(240, 240, 240));
+            }
+        }
+        this.drawPreview.repaint();
+    }
+
+    private void initControles() {
+        this.zoomInButton = new JButton("Zoom In");
+        this.centerButton = new JButton("[]");
+        this.zoomOutButton = new JButton("Zoom Out");
+        this.pnlBotones = new JPanel();
+        pnlBotones.add(zoomInButton);
+        pnlBotones.add(centerButton);
+        pnlBotones.add(zoomOutButton);
+        add(pnlBotones, BorderLayout.SOUTH);
+    }
+
+    private void initEventos() {
 
         // CLICK MOSTRAR COORDENADAS -------------------------------------------
         drawPreview.addMouseListener(new MouseAdapter() {
@@ -68,6 +95,17 @@ public class PreviewPanel extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 zoom /= 1.2; // Reduce el zoom en un 20%
+                drawPreview.repaint();
+            }
+        });
+
+        // BOTON CENTRAR MATRIZ ------------------------------------------------
+        centerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                offsetX = 0;
+                offsetY = 0;
+                zoom = 1.0;
                 drawPreview.repaint();
             }
         });
@@ -124,15 +162,6 @@ public class PreviewPanel extends javax.swing.JPanel {
             }
         });
     }
-
-    private void initControles() {
-        this.zoomInButton = new JButton("Zoom In");
-        this.zoomOutButton = new JButton("Zoom Out");
-        this.pnlBotones = new JPanel();
-        pnlBotones.add(zoomInButton);
-        pnlBotones.add(zoomOutButton);
-        add(pnlBotones, BorderLayout.SOUTH);
-    }
     //</editor-fold>
 
     public void setMatriz(int[][] matriz) {
@@ -150,8 +179,6 @@ public class PreviewPanel extends javax.swing.JPanel {
 
         private int columnas;
         private int filas;
-        private int tamañoCelda = 5;
-        private int separacionCeldas = 1;
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -174,8 +201,8 @@ public class PreviewPanel extends javax.swing.JPanel {
                             if (zoom >= 8.0) {
                                 g.setColor(Color.BLACK);
                                 g.setFont(new Font("TimesRoman", Font.BOLD, (int) (2 * zoom)));
-                                g.drawString(String.valueOf(matriz[i][j].getValor()), 
-                                        (int) (x + (tamañoCelda * zoom) / 2) - 3, 
+                                g.drawString(String.valueOf(matriz[i][j].getValor()),
+                                        (int) (x + (tamañoCelda * zoom) / 2) - 3,
                                         (int) (y + (tamañoCelda * zoom) / 2) + 7);
                             }
                         }
@@ -183,6 +210,22 @@ public class PreviewPanel extends javax.swing.JPanel {
                 }
             }
         }
+    }
+
+    public int getTamañoCelda() {
+        return tamañoCelda;
+    }
+
+    public void setTamañoCelda(int tamañoCelda) {
+        this.tamañoCelda = tamañoCelda;
+    }
+
+    public int getSeparacionCeldas() {
+        return separacionCeldas;
+    }
+
+    public void setSeparacionCeldas(int separacionCeldas) {
+        this.separacionCeldas = separacionCeldas;
     }
 
     @SuppressWarnings("unchecked")

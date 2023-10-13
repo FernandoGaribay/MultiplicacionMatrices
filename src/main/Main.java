@@ -9,17 +9,17 @@ public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
         iniciar();
-
+        
     }
 
     public void iniciar() {
-        this.matriz = new int[1000][1000];
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[0].length; j++) {
-                matriz[i][j] = new Random().nextInt(10);
-            }
-        }
-        this.pnlPreviewMatriz.setMatriz(matriz);
+//        this.matriz = new int[1000][1000];
+//        for (int i = 0; i < matriz.length; i++) {
+//            for (int j = 0; j < matriz[0].length; j++) {
+//                matriz[i][j] = new Random().nextInt(10);
+//            }
+//        }
+//        this.pnlPreviewMatriz.setMatriz(matriz);
     }
 
     @SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class Main extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnGenA = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -105,13 +105,13 @@ public class Main extends javax.swing.JFrame {
         });
         jPanel5.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 135, 30));
 
-        jButton3.setText("Generar Matriz A");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnGenA.setText("Generar Matriz A");
+        btnGenA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnGenAActionPerformed(evt);
             }
         });
-        jPanel5.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 135, 30));
+        jPanel5.add(btnGenA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 135, 30));
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 135, 135));
@@ -139,9 +139,9 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnGenAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenAActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnGenAActionPerformed
 
     public static void main(String args[]) {
 
@@ -172,10 +172,10 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGenA;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

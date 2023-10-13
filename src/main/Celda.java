@@ -8,6 +8,10 @@ public class Celda {
     private int valor;
     private Color color;
 
+    public Celda(Color bgColor) {
+        this.color = bgColor;
+    }
+    
     public Celda(int valor) {
         this.valor = valor;
         this.color = new Color(210, 210, 210);
