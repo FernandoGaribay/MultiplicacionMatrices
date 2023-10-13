@@ -26,6 +26,7 @@ public class MatrizSecuencial {
 
         int[][] result = new int[filas][columnasB];
 
+        long startTime = System.currentTimeMillis();
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnasB; j++) {
                 for (int k = 0; k < columnasA; k++) {
@@ -33,6 +34,9 @@ public class MatrizSecuencial {
                 }
             }
         }
+        long endTime = System.currentTimeMillis();
+        long tiempoTranscurrido = endTime - startTime;
+        System.out.println("Tiempo de ejecución: " + tiempoTranscurrido + " milisegundos");
 
         return result;
     }
@@ -57,12 +61,12 @@ public class MatrizSecuencial {
         MatrizSecuencial matrizLineal = new MatrizSecuencial();
         int[][] matrizA = {{1, 0}, {6, -2}, {-1, 4}};
         int[][] matrizB = {{2, -5, 1, -2}, {3, 2, 0, -1}};
-        
+
         matrizLineal.setMatrizA(matrizA);
         matrizLineal.setMatrizB(matrizB);
-        
+
         int[][] matrizR = matrizLineal.multiplicar();
-        
+
         for (int i = 0; i < matrizR.length; i++) {
             for (int j = 0; j < matrizR[0].length; j++) {
                 System.out.print(matrizR[i][j] + " ");

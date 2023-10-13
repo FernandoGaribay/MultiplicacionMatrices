@@ -2,12 +2,16 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -25,7 +29,7 @@ public class PreviewPanel extends javax.swing.JPanel {
     private JButton zoomInButton;
     private JButton centerButton;
     private JButton zoomOutButton;
-    private JPanel pnlBotones;
+    private JButton configButton;
 
     private Point puntoInicio; // Punto de inicio del arrastre
     private Point puntoFin;   // Punto de del fin del arrastre
@@ -58,14 +62,8 @@ public class PreviewPanel extends javax.swing.JPanel {
     }
 
     private void initControles() {
-        this.zoomInButton = new JButton("Zoom In");
-        this.centerButton = new JButton("[]");
-        this.zoomOutButton = new JButton("Zoom Out");
-        this.pnlBotones = new JPanel();
-        pnlBotones.add(zoomInButton);
-        pnlBotones.add(centerButton);
-        pnlBotones.add(zoomOutButton);
-        add(pnlBotones, BorderLayout.SOUTH);
+        Controles pnlControles = new Controles();
+        add(pnlControles, BorderLayout.SOUTH);
     }
 
     private void initEventos() {
@@ -94,8 +92,12 @@ public class PreviewPanel extends javax.swing.JPanel {
         zoomOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                zoom /= 1.2; // Reduce el zoom en un 20%
-                drawPreview.repaint();
+                if (zoom > 1.0f) {
+                    zoom /= 1.2; // Reduce el zoom en un 20%
+                    drawPreview.repaint();
+                } else {
+                    zoom = 1.0;
+                }
             }
         });
 
@@ -209,6 +211,99 @@ public class PreviewPanel extends javax.swing.JPanel {
                     }
                 }
             }
+        }
+    }
+
+    class Controles extends JPanel {
+
+        private int alturaBotones;
+        private int hGap;
+        
+        private JPanel izquierda;
+        private JPanel centrar;
+        private JPanel derecha;
+
+        public Controles() {
+            initComponentes();
+
+            addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentResized(ComponentEvent e) {
+                    int panelWidth = (int) (getWidth());
+                    int panelHeigh = (int) (getHeight());
+                    int panelLateralWidth = (int) (panelWidth * 0.20);
+                    int panelCentralwidth = (int) (panelWidth * 0.60);
+                    hGap = (int) ((getPreferredSize().getHeight() / 2) - centerButton.getPreferredSize().getHeight() / 2);
+
+//                    System.out.println("width; " + panelWidth);
+                    izquierda.setLayout(new FlowLayout(FlowLayout.CENTER, 10, hGap));
+                    izquierda.setPreferredSize(new Dimension(panelLateralWidth, panelHeigh));
+//                    System.out.println("Width izquierda; " + (int) (panelWidth * 0.20));
+
+                    centrar.setPreferredSize(new Dimension(panelCentralwidth, panelHeigh));
+                    centrar.setLayout(new FlowLayout(FlowLayout.CENTER, 10, hGap));
+//                    System.out.println("Width centrar; " + (int) (panelWidth * 0.60));
+
+                    derecha.setPreferredSize(new Dimension(panelLateralWidth, panelHeigh));
+//                    System.out.println("Width derecha; " + (int) (panelWidth * 0.20));
+
+                    revalidate();
+                }
+            });
+        }
+
+        public void initComponentes() {
+            setPreferredSize(new Dimension((int) (this.getPreferredSize().getWidth()), 30));
+            setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+
+            this.alturaBotones = (int) (getPreferredSize().getHeight() * 0.8); // Margen Vertical con relacion a 80%
+
+            pnlIzquierda();
+            pnlCentral();
+            pnlDerecha();
+
+            add(izquierda);
+            add(centrar);
+            add(derecha);
+        }
+
+        public void pnlIzquierda() {
+            izquierda = new JPanel();
+
+            configButton = new JButton("Configuracion");
+
+            configButton.setPreferredSize(new Dimension(100, alturaBotones));
+
+            configButton.setFocusPainted(false);
+            
+            izquierda.setBackground(new Color(153, 219, 254));
+            izquierda.add(configButton);
+        }
+
+        public void pnlCentral() {
+            centrar = new JPanel();
+
+            zoomInButton = new JButton("Zoom In");
+            centerButton = new JButton("[]");
+            zoomOutButton = new JButton("Zoom Out");
+
+            zoomInButton.setPreferredSize(new Dimension(100, alturaBotones));
+            centerButton.setPreferredSize(new Dimension(50, alturaBotones));
+            zoomOutButton.setPreferredSize(new Dimension(100, alturaBotones));
+            
+            zoomInButton.setFocusPainted(false);
+            centerButton.setFocusPainted(false);
+            zoomOutButton.setFocusPainted(false);
+
+            centrar.setBackground(new Color(153, 219, 254));
+            centrar.add(zoomInButton);
+            centrar.add(centerButton);
+            centrar.add(zoomOutButton);
+        }
+
+        public void pnlDerecha() {
+            derecha = new JPanel();
+            derecha.setBackground(new Color(153, 219, 254));
         }
     }
 
