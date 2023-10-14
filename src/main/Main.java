@@ -300,10 +300,6 @@ public class Main extends javax.swing.JFrame {
         return matrizTemp;
     }
 
-    public void secuencial() {
-
-    }
-
     public static void main(String args[]) {
 
         try {
