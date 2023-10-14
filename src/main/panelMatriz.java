@@ -56,7 +56,7 @@ public class panelMatriz extends JPanel {
         FontMetrics fm = g2d.getFontMetrics(font);
         int xTexto = (getWidth() - fm.stringWidth(texto)) / 2;
         int yTexto = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-
+        
         g2d.setColor(Color.WHITE);
         g2d.setFont(font);
         g2d.drawString(texto, xTexto + 2, yTexto + 2);

@@ -6,9 +6,12 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -202,11 +205,19 @@ public class PreviewPanel extends javax.swing.JPanel {
                             g.fillRect(x, y, (int) (tamañoCelda * zoom), (int) (tamañoCelda * zoom));
 
                             if (zoom >= 8.0) {
-                                g.setColor(Color.BLACK);
-                                g.setFont(new Font("TimesRoman", Font.BOLD, (int) (2 * zoom)));
-                                g.drawString(String.valueOf(matriz[i][j].getValor()),
-                                        (int) (x + (tamañoCelda * zoom) / 2) - 3,
-                                        (int) (y + (tamañoCelda * zoom) / 2) + 7);
+                                Graphics2D g2d = (Graphics2D) g;
+
+                                String texto = String.valueOf(matriz[i][j].getValor());
+                                Font font = new Font("TimesRoman", Font.BOLD, (int) (2 * zoom));
+                                FontMetrics fm = g2d.getFontMetrics(font);
+
+                                int xTexto = (int) ((x + (tamañoCelda * zoom) / 2) - fm.stringWidth(texto) / 2);
+                                int yTexto = (int) (y + ((tamañoCelda * zoom) / 2) + (fm.getAscent() - fm.getDescent()) / 2);
+
+                                g2d.setColor(Color.BLACK);
+                                g2d.setFont(font);
+                                g2d.drawString(texto, xTexto, yTexto);
+//                                g2d.fillOval(xTexto, yTexto, 10, 10);
                             }
                         }
                     }
@@ -219,7 +230,7 @@ public class PreviewPanel extends javax.swing.JPanel {
 
         private int alturaBotones;
         private int hGap;
-        
+
         private JPanel izquierda;
         private JPanel centrar;
         private JPanel derecha;
@@ -276,9 +287,9 @@ public class PreviewPanel extends javax.swing.JPanel {
             configButton.setPreferredSize(new Dimension(100, alturaBotones));
 
             configButton.setFocusPainted(false);
-            
+
             configButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            
+
             izquierda.setBackground(new Color(153, 219, 254));
             izquierda.add(configButton);
         }
@@ -293,7 +304,7 @@ public class PreviewPanel extends javax.swing.JPanel {
             zoomInButton.setPreferredSize(new Dimension(100, alturaBotones));
             centerButton.setPreferredSize(new Dimension(50, alturaBotones));
             zoomOutButton.setPreferredSize(new Dimension(100, alturaBotones));
-            
+
             zoomInButton.setFocusPainted(false);
             centerButton.setFocusPainted(false);
             zoomOutButton.setFocusPainted(false);
@@ -301,7 +312,7 @@ public class PreviewPanel extends javax.swing.JPanel {
             zoomInButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             centerButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             zoomOutButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            
+
             centrar.setBackground(new Color(153, 219, 254));
             centrar.add(zoomInButton);
             centrar.add(centerButton);
