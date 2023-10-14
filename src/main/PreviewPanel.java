@@ -208,7 +208,7 @@ public class PreviewPanel extends javax.swing.JPanel {
                                 Graphics2D g2d = (Graphics2D) g;
 
                                 String texto = String.valueOf(matriz[i][j].getValor());
-                                Font font = new Font("TimesRoman", Font.BOLD, (int) (2 * zoom));
+                                Font font = new Font("TimesRoman", Font.BOLD, (int) (1.5 * zoom));
                                 FontMetrics fm = g2d.getFontMetrics(font);
 
                                 int xTexto = (int) ((x + (tamañoCelda * zoom) / 2) - fm.stringWidth(texto) / 2);

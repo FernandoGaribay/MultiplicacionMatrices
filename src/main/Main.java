@@ -32,11 +32,15 @@ public class Main extends javax.swing.JFrame {
         sliderNumHilos = new javax.swing.JSlider();
         pnlContenedorHilos = new javax.swing.JPanel();
         pnlConfiguracion = new javax.swing.JPanel();
+        btnDelMatrizB = new javax.swing.JButton();
         btnGenMatrizB = new javax.swing.JButton();
+        btnDelMatrizA = new javax.swing.JButton();
         btnGenMatrizA = new javax.swing.JButton();
         pnlMatrizB = new javax.swing.JPanel();
         pnlMatrizA = new javax.swing.JPanel();
         btnAplicarCambios = new javax.swing.JButton();
+        lblMatrizB = new javax.swing.JLabel();
+        lblMatrizA = new javax.swing.JLabel();
         btnComenzar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -112,7 +116,19 @@ public class Main extends javax.swing.JFrame {
         pnlConfiguracion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuracion", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlConfiguracion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnGenMatrizB.setText("Generar Matriz B");
+        btnDelMatrizB.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        btnDelMatrizB.setText("Borrar");
+        btnDelMatrizB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelMatrizB.setFocusPainted(false);
+        btnDelMatrizB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelMatrizBActionPerformed(evt);
+            }
+        });
+        pnlConfiguracion.add(btnDelMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 60, 60, 20));
+
+        btnGenMatrizB.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        btnGenMatrizB.setText("Generar");
         btnGenMatrizB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGenMatrizB.setFocusPainted(false);
         btnGenMatrizB.addActionListener(new java.awt.event.ActionListener() {
@@ -120,9 +136,21 @@ public class Main extends javax.swing.JFrame {
                 btnGenMatrizBActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnGenMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 135, 30));
+        pnlConfiguracion.add(btnGenMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 70, 20));
 
-        btnGenMatrizA.setText("Generar Matriz A");
+        btnDelMatrizA.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        btnDelMatrizA.setText("Borrar");
+        btnDelMatrizA.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelMatrizA.setFocusPainted(false);
+        btnDelMatrizA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelMatrizAActionPerformed(evt);
+            }
+        });
+        pnlConfiguracion.add(btnDelMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 60, 60, 20));
+
+        btnGenMatrizA.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        btnGenMatrizA.setText("Generar");
         btnGenMatrizA.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGenMatrizA.setFocusPainted(false);
         btnGenMatrizA.addActionListener(new java.awt.event.ActionListener() {
@@ -130,7 +158,7 @@ public class Main extends javax.swing.JFrame {
                 btnGenMatrizAActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 135, 30));
+        pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 70, 20));
 
         pnlMatrizB.setBackground(new java.awt.Color(255, 255, 255));
         pnlMatrizB.setLayout(new java.awt.BorderLayout());
@@ -144,6 +172,16 @@ public class Main extends javax.swing.JFrame {
         btnAplicarCambios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAplicarCambios.setFocusPainted(false);
         pnlConfiguracion.add(btnAplicarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 295, 30));
+
+        lblMatrizB.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblMatrizB.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblMatrizB.setText("Matriz B");
+        pnlConfiguracion.add(lblMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 32, 130, 20));
+
+        lblMatrizA.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblMatrizA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblMatrizA.setText("Matriz A");
+        pnlConfiguracion.add(lblMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 32, 130, 20));
 
         pnlLateral.add(pnlConfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 330, 290));
 
@@ -217,7 +255,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderNumHilosMouseReleased
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
-        if (matrizA == null && matrizB == null) {
+        if (matrizA == null || matrizB == null) {
             JOptionPane.showMessageDialog(this, "Una de las matrices esta vacia.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -235,6 +273,20 @@ public class Main extends javax.swing.JFrame {
             pnlPreviewMatriz.setMatriz(matrizResultante);
         }
     }//GEN-LAST:event_btnComenzarActionPerformed
+
+    private void btnDelMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizBActionPerformed
+        matrizB = null;
+        pnlMatrizB.removeAll();
+        pnlMatrizB.repaint();
+        pnlMatrizB.revalidate();
+    }//GEN-LAST:event_btnDelMatrizBActionPerformed
+
+    private void btnDelMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizAActionPerformed
+        matrizA = null;
+        pnlMatrizA.removeAll();
+        pnlMatrizA.repaint();
+        pnlMatrizA.revalidate();
+    }//GEN-LAST:event_btnDelMatrizAActionPerformed
 
     public int[][] generarMatriz(int filas, int columnas) {
         int[][] matrizTemp = new int[filas][columnas];
@@ -284,9 +336,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel background;
     private javax.swing.JButton btnAplicarCambios;
     private javax.swing.JButton btnComenzar;
+    private javax.swing.JButton btnDelMatrizA;
+    private javax.swing.JButton btnDelMatrizB;
     private javax.swing.JButton btnGenMatrizA;
     private javax.swing.JButton btnGenMatrizB;
     private javax.swing.ButtonGroup btnGroupAlgoritmos;
+    private javax.swing.JLabel lblMatrizA;
+    private javax.swing.JLabel lblMatrizB;
     private javax.swing.JLabel lblNumHilos;
     private javax.swing.JPanel pnlAlgoritmos;
     private javax.swing.JPanel pnlConfiguracion;
