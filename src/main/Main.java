@@ -84,7 +84,7 @@ public class Main extends javax.swing.JFrame {
         pnlMonitor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblNumHilos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblNumHilos.setText("Numero de hilos: 2");
+        lblNumHilos.setText("Numero de hilos: 1");
         pnlMonitor.add(lblNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 290, 30));
 
         sliderNumHilos.setMajorTickSpacing(2);
@@ -92,7 +92,7 @@ public class Main extends javax.swing.JFrame {
         sliderNumHilos.setMinimum(1);
         sliderNumHilos.setPaintLabels(true);
         sliderNumHilos.setPaintTicks(true);
-        sliderNumHilos.setValue(2);
+        sliderNumHilos.setValue(1);
         sliderNumHilos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         sliderNumHilos.setEnabled(false);
         sliderNumHilos.setFocusable(false);
