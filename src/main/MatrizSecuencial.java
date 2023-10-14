@@ -1,21 +1,14 @@
 package main;
 
+import java.util.Random;
+
 public class MatrizSecuencial {
 
-    private int matrizA[][];
-    private int matrizB[][];
-
     public MatrizSecuencial() {
-        this.matrizA = null;
-        this.matrizB = null;
+
     }
 
-    public MatrizSecuencial(int[][] matrizA, int[][] matrizB) {
-        this.matrizA = matrizA;
-        this.matrizB = matrizB;
-    }
-
-    public int[][] multiplicar() {
+    public int[][] multiplicar(int[][] matrizA, int[][] matrizB) {
         if (matrizA == null || matrizB == null) {
             return null;
         }
@@ -24,48 +17,41 @@ public class MatrizSecuencial {
         int columnasA = matrizA[0].length;
         int columnasB = matrizB[0].length;
 
-        int[][] result = new int[filas][columnasB];
+        int[][] resultante = new int[filas][columnasB];
 
-        long startTime = System.currentTimeMillis();
+        long tiempoInicio = System.currentTimeMillis();
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnasB; j++) {
                 for (int k = 0; k < columnasA; k++) {
-                    result[i][j] += matrizA[i][k] * matrizB[k][j];
+                    resultante[i][j] += matrizA[i][k] * matrizB[k][j];
                 }
             }
         }
-        long endTime = System.currentTimeMillis();
-        long tiempoTranscurrido = endTime - startTime;
-        System.out.println("Tiempo de ejecución: " + tiempoTranscurrido + " milisegundos");
+        long tiempoFinal = System.currentTimeMillis();
+        long tiempoTranscurrido = tiempoFinal - tiempoInicio;
+        System.out.println("Tiempo de calculo: " + tiempoTranscurrido + " milisegundos");
 
-        return result;
+        return resultante;
     }
 
-    public int[][] getMatrizA() {
-        return matrizA;
-    }
+    public int[][] generarMatriz(int filas, int columnas) {
+        int[][] matrizTemp = new int[filas][columnas];
+        Random random = new Random();
 
-    public void setMatrizA(int[][] matrizA) {
-        this.matrizA = matrizA;
-    }
-
-    public int[][] getMatrizB() {
-        return matrizB;
-    }
-
-    public void setMatrizB(int[][] matrizB) {
-        this.matrizB = matrizB;
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                matrizTemp[i][j] = random.nextInt(10);
+            }
+        }
+        return matrizTemp;
     }
 
     public static void main(String[] args) {
         MatrizSecuencial matrizLineal = new MatrizSecuencial();
-        int[][] matrizA = {{1, 0}, {6, -2}, {-1, 4}};
-        int[][] matrizB = {{2, -5, 1, -2}, {3, 2, 0, -1}};
+        int[][] matrizA = matrizLineal.generarMatriz(1000, 1000);
+        int[][] matrizB = matrizLineal.generarMatriz(1000, 1000);
 
-        matrizLineal.setMatrizA(matrizA);
-        matrizLineal.setMatrizB(matrizB);
-
-        int[][] matrizR = matrizLineal.multiplicar();
+        int[][] matrizR = matrizLineal.multiplicar(matrizA, matrizB);
 
         for (int i = 0; i < matrizR.length; i++) {
             for (int j = 0; j < matrizR[0].length; j++) {

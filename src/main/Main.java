@@ -1,12 +1,18 @@
 package main;
 
+import java.awt.HeadlessException;
+import java.util.Random;
+import javax.swing.JOptionPane;
+
 public class Main extends javax.swing.JFrame {
 
-    private int[][] matriz;
+    private int[][] matrizA;
+    private int[][] matrizB;
+    private MatrizSecuencial objSecuencial;
 
     public Main() {
         initComponents();
-        
+        objSecuencial = new MatrizSecuencial();
     }
 
     @SuppressWarnings("unchecked")
@@ -48,6 +54,7 @@ public class Main extends javax.swing.JFrame {
 
         btnGroupAlgoritmos.add(radioSecuencial);
         radioSecuencial.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        radioSecuencial.setSelected(true);
         radioSecuencial.setText("Procesamiento Secuencial");
         radioSecuencial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         radioSecuencial.setFocusPainted(false);
@@ -83,6 +90,7 @@ public class Main extends javax.swing.JFrame {
         sliderNumHilos.setPaintTicks(true);
         sliderNumHilos.setValue(2);
         sliderNumHilos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        sliderNumHilos.setEnabled(false);
         sliderNumHilos.setFocusable(false);
         sliderNumHilos.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -125,9 +133,11 @@ public class Main extends javax.swing.JFrame {
         pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 135, 30));
 
         pnlMatrizB.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMatrizB.setLayout(new java.awt.BorderLayout());
         pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 135, 135));
 
         pnlMatrizA.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMatrizA.setLayout(new java.awt.BorderLayout());
         pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 135, 135));
 
         btnAplicarCambios.setText("Aplicar cambios");
@@ -140,6 +150,11 @@ public class Main extends javax.swing.JFrame {
         btnComenzar.setText("Comenzar");
         btnComenzar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnComenzar.setFocusPainted(false);
+        btnComenzar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComenzarActionPerformed(evt);
+            }
+        });
         pnlLateral.add(btnComenzar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 773, 350, 50));
 
         background.add(pnlLateral);
@@ -152,11 +167,45 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizBActionPerformed
-        // TODO add your handling code here:
+        int filas = 0;
+        int columnas = 0;
+        try {
+            filas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de filas: "));
+            columnas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de columnas: "));
+        } catch (HeadlessException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Favor de insertar un numero valido.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (filas == 0 || columnas == 0) {
+            JOptionPane.showMessageDialog(this, "Las matrices no pueden ser con filas/columnas 0.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        matrizB = generarMatriz(filas, columnas);
+        pnlMatrizB.add(new panelMatriz(filas + "x" + columnas));
+        pnlMatrizB.repaint();
+        pnlMatrizB.revalidate();
     }//GEN-LAST:event_btnGenMatrizBActionPerformed
 
     private void btnGenMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizAActionPerformed
-        // TODO add your handling code here:
+        int filas = 0;
+        int columnas = 0;
+        try {
+            filas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de filas: "));
+            columnas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de columnas: "));
+        } catch (HeadlessException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Favor de insertar un numero valido.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (filas == 0 || columnas == 0) {
+            JOptionPane.showMessageDialog(this, "Las matrices no pueden ser con filas/columnas 0.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        matrizA = generarMatriz(filas, columnas);
+        pnlMatrizA.add(new panelMatriz(filas + "x" + columnas));
+        pnlMatrizA.repaint();
+        pnlMatrizA.revalidate();
     }//GEN-LAST:event_btnGenMatrizAActionPerformed
 
     private void sliderNumHilosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderNumHilosStateChanged
@@ -166,6 +215,42 @@ public class Main extends javax.swing.JFrame {
     private void sliderNumHilosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderNumHilosMouseReleased
         System.out.println("Numero de hilos establecido a: " + sliderNumHilos.getValue());
     }//GEN-LAST:event_sliderNumHilosMouseReleased
+
+    private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
+        if (matrizA == null && matrizB == null) {
+            JOptionPane.showMessageDialog(this, "Una de las matrices esta vacia.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int[][] matrizResultante;
+        if (radioSecuencial.isSelected()) {
+            matrizResultante = objSecuencial.multiplicar(matrizA, matrizB);
+
+            for (int i = 0; i < matrizResultante.length; i++) {
+                for (int j = 0; j < matrizResultante[0].length; j++) {
+                    System.out.print(matrizResultante[i][j] + " ");
+                }
+                System.out.println("");
+            }
+            pnlPreviewMatriz.setMatriz(matrizResultante);
+        }
+    }//GEN-LAST:event_btnComenzarActionPerformed
+
+    public int[][] generarMatriz(int filas, int columnas) {
+        int[][] matrizTemp = new int[filas][columnas];
+        Random random = new Random();
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                matrizTemp[i][j] = random.nextInt(10);
+            }
+        }
+        return matrizTemp;
+    }
+
+    public void secuencial() {
+
+    }
 
     public static void main(String args[]) {
 
