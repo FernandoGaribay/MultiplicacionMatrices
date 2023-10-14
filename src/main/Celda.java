@@ -20,7 +20,7 @@ public class Celda {
     public void setRandomColorCelda() {
         Random rand = new Random();
 
-        this.color = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+        this.color = Color.getHSBColor(rand.nextFloat(), 1, 1);
     }
 
     public int getValor() {
