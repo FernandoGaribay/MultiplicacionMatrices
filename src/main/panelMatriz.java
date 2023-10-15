@@ -52,7 +52,7 @@ public class panelMatriz extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         String texto = getText();
-        Font font = new Font("TimesRoman", Font.BOLD, 30);
+        Font font = new Font("TimesRoman", Font.BOLD, 25);
         FontMetrics fm = g2d.getFontMetrics(font);
         int xTexto = (getWidth() - fm.stringWidth(texto)) / 2;
         int yTexto = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;

@@ -9,10 +9,12 @@ public class Main extends javax.swing.JFrame {
     private int[][] matrizA;
     private int[][] matrizB;
     private MatrizSecuencial objSecuencial;
+    private MatrizConcurrente objConcurrente;
 
     public Main() {
         initComponents();
         objSecuencial = new MatrizSecuencial();
+        objConcurrente = new MatrizConcurrente();
     }
 
     @SuppressWarnings("unchecked")
@@ -26,7 +28,7 @@ public class Main extends javax.swing.JFrame {
         pnlAlgoritmos = new javax.swing.JPanel();
         radioSecuencial = new javax.swing.JRadioButton();
         radioCannon = new javax.swing.JRadioButton();
-        radioStrassen = new javax.swing.JRadioButton();
+        radioColumnas = new javax.swing.JRadioButton();
         pnlMonitor = new javax.swing.JPanel();
         lblNumHilos = new javax.swing.JLabel();
         sliderNumHilos = new javax.swing.JSlider();
@@ -62,6 +64,11 @@ public class Main extends javax.swing.JFrame {
         radioSecuencial.setText("Procesamiento Secuencial");
         radioSecuencial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         radioSecuencial.setFocusPainted(false);
+        radioSecuencial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioSecuencialActionPerformed(evt);
+            }
+        });
         pnlAlgoritmos.add(radioSecuencial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 300, -1));
 
         btnGroupAlgoritmos.add(radioCannon);
@@ -71,12 +78,17 @@ public class Main extends javax.swing.JFrame {
         radioCannon.setFocusPainted(false);
         pnlAlgoritmos.add(radioCannon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 300, -1));
 
-        btnGroupAlgoritmos.add(radioStrassen);
-        radioStrassen.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        radioStrassen.setText("Por bloques (Strassen)");
-        radioStrassen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        radioStrassen.setFocusPainted(false);
-        pnlAlgoritmos.add(radioStrassen, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 300, -1));
+        btnGroupAlgoritmos.add(radioColumnas);
+        radioColumnas.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        radioColumnas.setText("Concurrente Por Columnas");
+        radioColumnas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        radioColumnas.setFocusPainted(false);
+        radioColumnas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioColumnasActionPerformed(evt);
+            }
+        });
+        pnlAlgoritmos.add(radioColumnas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 300, -1));
 
         pnlLateral.add(pnlAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 160));
 
@@ -264,12 +276,11 @@ public class Main extends javax.swing.JFrame {
         if (radioSecuencial.isSelected()) {
             matrizResultante = objSecuencial.multiplicar(matrizA, matrizB);
 
-            for (int i = 0; i < matrizResultante.length; i++) {
-                for (int j = 0; j < matrizResultante[0].length; j++) {
-                    System.out.print(matrizResultante[i][j] + " ");
-                }
-                System.out.println("");
-            }
+            pnlPreviewMatriz.setMatriz(matrizResultante);
+        } else if (radioColumnas.isSelected()) {
+            objConcurrente.setNumHilos(sliderNumHilos.getValue());
+            matrizResultante = objConcurrente.multiplicar(matrizA, matrizB);
+
             pnlPreviewMatriz.setMatriz(matrizResultante);
         }
     }//GEN-LAST:event_btnComenzarActionPerformed
@@ -288,6 +299,22 @@ public class Main extends javax.swing.JFrame {
         pnlMatrizA.revalidate();
     }//GEN-LAST:event_btnDelMatrizAActionPerformed
 
+    private void radioSecuencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSecuencialActionPerformed
+        deshabilitarMonitor();
+    }//GEN-LAST:event_radioSecuencialActionPerformed
+
+    private void radioColumnasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioColumnasActionPerformed
+        habilitarMonitor();
+    }//GEN-LAST:event_radioColumnasActionPerformed
+
+    public void habilitarMonitor(){
+        this.sliderNumHilos.setEnabled(true);
+    }
+    
+    public void deshabilitarMonitor(){
+        this.sliderNumHilos.setEnabled(false);
+    }
+    
     public int[][] generarMatriz(int filas, int columnas) {
         int[][] matrizTemp = new int[filas][columnas];
         Random random = new Random();
@@ -298,6 +325,15 @@ public class Main extends javax.swing.JFrame {
             }
         }
         return matrizTemp;
+    }
+
+    public void imprimirMatriz(int[][] matrizResultante) {
+        for (int i = 0; i < matrizResultante.length; i++) {
+            for (int j = 0; j < matrizResultante[0].length; j++) {
+                System.out.print(matrizResultante[i][j] + " ");
+            }
+            System.out.println("");
+        }
     }
 
     public static void main(String args[]) {
@@ -349,8 +385,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMonitor;
     private main.PreviewPanel pnlPreviewMatriz;
     private javax.swing.JRadioButton radioCannon;
+    private javax.swing.JRadioButton radioColumnas;
     private javax.swing.JRadioButton radioSecuencial;
-    private javax.swing.JRadioButton radioStrassen;
     private javax.swing.JSlider sliderNumHilos;
     // End of variables declaration//GEN-END:variables
 }
