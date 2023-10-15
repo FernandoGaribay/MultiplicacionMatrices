@@ -46,6 +46,7 @@ public class Main extends javax.swing.JFrame {
         btnComenzar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         background.setBackground(new java.awt.Color(255, 255, 255));
@@ -210,7 +211,7 @@ public class Main extends javax.swing.JFrame {
         background.add(pnlLateral);
         pnlLateral.setBounds(820, 10, 370, 835);
 
-        getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 900));
+        getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 850));
 
         pack();
         setLocationRelativeTo(null);
