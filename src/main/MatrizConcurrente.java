@@ -14,7 +14,7 @@ public class MatrizConcurrente {
     private int numHilos;
     
     public MatrizConcurrente() {
-        this.numHilos = 6;
+        this.numHilos = 8;
     }
 
     // CON LISTA FUTURE
