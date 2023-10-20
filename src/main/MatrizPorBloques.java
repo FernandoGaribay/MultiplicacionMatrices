@@ -24,7 +24,7 @@ public class MatrizPorBloques {
         this.numBloques = 16;
     }
 
-    public int[][] multiplicar(int[][] matrizA, int[][] matrizB, int numBloques) {
+    public int[][] multiplicar(int[][] matrizA, int[][] matrizB) {
         if (matrizA == null || matrizB == null) {
             return null;
         }
@@ -37,10 +37,6 @@ public class MatrizPorBloques {
         int columnasB = matrizB[0].length;
         int[][] resultante = new int[filasA][columnasB];
         int volumenBloque = filasA / numBloques;
-
-        if (columnasA != filasB) {
-            throw new IllegalArgumentException("Las matrices no son compatibles para la multiplicación.");
-        }
 
         long tiempoInicio = System.currentTimeMillis();  // CONTADOR INICIA ------------------------------------------
         try {
@@ -105,8 +101,8 @@ public class MatrizPorBloques {
 
     public static void main(String[] args) {
         MatrizConcurrente matrizConcurrente = new MatrizConcurrente();
-        int[][] matrizA = matrizConcurrente.generarMatriz(5000, 5000);
-        int[][] matrizB = matrizConcurrente.generarMatriz(5000, 5000);
+        int[][] matrizA = matrizConcurrente.generarMatriz(100, 5000);
+        int[][] matrizB = matrizConcurrente.generarMatriz(3000, 100);
 
         int[][] matrizR = matrizConcurrente.multiplicar(matrizA, matrizB);
 
