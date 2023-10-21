@@ -248,7 +248,8 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="10" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Borrar"/>
+                    <Property name="text" type="java.lang.String" value="*"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Borrar Matriz B"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -259,7 +260,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="250" y="30" width="60" height="20"/>
+                      <AbsoluteConstraints x="265" y="30" width="40" height="20"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -269,6 +270,7 @@
                       <Font name="Segoe UI" size="10" style="0"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Generar"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Generar Matriz B"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -279,7 +281,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="180" y="30" width="70" height="20"/>
+                      <AbsoluteConstraints x="180" y="30" width="80" height="20"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -288,7 +290,8 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="10" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Borrar"/>
+                    <Property name="text" type="java.lang.String" value="*"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Borrar Matriz A"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -299,7 +302,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="90" y="30" width="60" height="20"/>
+                      <AbsoluteConstraints x="105" y="30" width="40" height="20"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -309,6 +312,7 @@
                       <Font name="Segoe UI" size="10" style="0"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Generar"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Generar Matriz A"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -319,7 +323,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="20" y="30" width="70" height="20"/>
+                      <AbsoluteConstraints x="20" y="30" width="80" height="20"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -331,7 +335,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="185" y="60" width="120" height="120"/>
+                      <AbsoluteConstraints x="180" y="55" width="125" height="125"/>
                     </Constraint>
                   </Constraints>
 
@@ -345,26 +349,12 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="25" y="60" width="120" height="120"/>
+                      <AbsoluteConstraints x="20" y="55" width="125" height="125"/>
                     </Constraint>
                   </Constraints>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
                 </Container>
-                <Component class="javax.swing.JButton" name="btnAplicarCambios">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Aplicar cambios"/>
-                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Hand Cursor"/>
-                    </Property>
-                    <Property name="focusPainted" type="boolean" value="false"/>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="20" y="190" width="120" height="30"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
                 <Component class="javax.swing.JButton" name="btnHistorial">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Historial"/>
@@ -378,7 +368,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="185" y="190" width="120" height="30"/>
+                      <AbsoluteConstraints x="20" y="190" width="285" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>

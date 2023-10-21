@@ -53,7 +53,6 @@ public class Main extends javax.swing.JFrame {
         btnGenMatrizA = new javax.swing.JButton();
         pnlMatrizB = new javax.swing.JPanel();
         pnlMatrizA = new javax.swing.JPanel();
-        btnAplicarCambios = new javax.swing.JButton();
         btnHistorial = new javax.swing.JButton();
         btnComenzar = new javax.swing.JButton();
 
@@ -147,7 +146,8 @@ public class Main extends javax.swing.JFrame {
         pnlConfiguracion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnDelMatrizB.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
-        btnDelMatrizB.setText("Borrar");
+        btnDelMatrizB.setText("*");
+        btnDelMatrizB.setToolTipText("Borrar Matriz B");
         btnDelMatrizB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDelMatrizB.setFocusPainted(false);
         btnDelMatrizB.addActionListener(new java.awt.event.ActionListener() {
@@ -155,10 +155,11 @@ public class Main extends javax.swing.JFrame {
                 btnDelMatrizBActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnDelMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 30, 60, 20));
+        pnlConfiguracion.add(btnDelMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(265, 30, 40, 20));
 
         btnGenMatrizB.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         btnGenMatrizB.setText("Generar");
+        btnGenMatrizB.setToolTipText("Generar Matriz B");
         btnGenMatrizB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGenMatrizB.setFocusPainted(false);
         btnGenMatrizB.addActionListener(new java.awt.event.ActionListener() {
@@ -166,10 +167,11 @@ public class Main extends javax.swing.JFrame {
                 btnGenMatrizBActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnGenMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 70, 20));
+        pnlConfiguracion.add(btnGenMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 80, 20));
 
         btnDelMatrizA.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
-        btnDelMatrizA.setText("Borrar");
+        btnDelMatrizA.setText("*");
+        btnDelMatrizA.setToolTipText("Borrar Matriz A");
         btnDelMatrizA.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDelMatrizA.setFocusPainted(false);
         btnDelMatrizA.addActionListener(new java.awt.event.ActionListener() {
@@ -177,10 +179,11 @@ public class Main extends javax.swing.JFrame {
                 btnDelMatrizAActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnDelMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 60, 20));
+        pnlConfiguracion.add(btnDelMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(105, 30, 40, 20));
 
         btnGenMatrizA.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         btnGenMatrizA.setText("Generar");
+        btnGenMatrizA.setToolTipText("Generar Matriz A");
         btnGenMatrizA.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGenMatrizA.setFocusPainted(false);
         btnGenMatrizA.addActionListener(new java.awt.event.ActionListener() {
@@ -188,20 +191,15 @@ public class Main extends javax.swing.JFrame {
                 btnGenMatrizAActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 70, 20));
+        pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 80, 20));
 
         pnlMatrizB.setBackground(new java.awt.Color(255, 255, 255));
         pnlMatrizB.setLayout(new java.awt.BorderLayout());
-        pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(185, 60, 120, 120));
+        pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 55, 125, 125));
 
         pnlMatrizA.setBackground(new java.awt.Color(255, 255, 255));
         pnlMatrizA.setLayout(new java.awt.BorderLayout());
-        pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 60, 120, 120));
-
-        btnAplicarCambios.setText("Aplicar cambios");
-        btnAplicarCambios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAplicarCambios.setFocusPainted(false);
-        pnlConfiguracion.add(btnAplicarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 120, 30));
+        pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 55, 125, 125));
 
         btnHistorial.setText("Historial");
         btnHistorial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -211,7 +209,7 @@ public class Main extends javax.swing.JFrame {
                 btnHistorialActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(185, 190, 120, 30));
+        pnlConfiguracion.add(btnHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 285, 30));
 
         pnlLateral.add(pnlConfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 390, 330, 230));
 
@@ -325,6 +323,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnComenzarActionPerformed
 
     private void btnDelMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizBActionPerformed
+        JOptionPane.showMessageDialog(this, "Matriz B Eliminada", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         matrizB = null;
         pnlMatrizB.removeAll();
         pnlMatrizB.repaint();
@@ -332,7 +331,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDelMatrizBActionPerformed
 
     private void btnDelMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizAActionPerformed
-        objPopup.showPopup("Matriz Eliminada");
+        JOptionPane.showMessageDialog(this, "Matriz A Eliminada", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         matrizA = null;
         pnlMatrizA.removeAll();
         pnlMatrizA.repaint();
@@ -414,7 +413,6 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
-    private javax.swing.JButton btnAplicarCambios;
     private javax.swing.JButton btnComenzar;
     private javax.swing.JButton btnDelMatrizA;
     private javax.swing.JButton btnDelMatrizB;
