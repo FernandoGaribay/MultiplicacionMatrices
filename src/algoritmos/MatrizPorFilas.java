@@ -1,19 +1,17 @@
-package main;
+package algoritmos;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
-public class MatrizConcurrente {
+public class MatrizPorFilas {
     
     private int numHilos;
     
-    public MatrizConcurrente() {
+    public MatrizPorFilas() {
         this.numHilos = 8;
     }
 
@@ -135,7 +133,7 @@ public class MatrizConcurrente {
     }
 
     public static void main(String[] args) {
-        MatrizConcurrente matrizConcurrente = new MatrizConcurrente();
+        MatrizPorFilas matrizConcurrente = new MatrizPorFilas();
         int[][] matrizA = matrizConcurrente.generarMatriz(5000, 5000);
         int[][] matrizB = matrizConcurrente.generarMatriz(5000, 5000);
 

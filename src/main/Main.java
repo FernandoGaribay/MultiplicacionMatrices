@@ -1,18 +1,13 @@
 package main;
 
-import java.awt.FlowLayout;
+import componentes.panelMatriz;
+import algoritmos.MatrizPorBloques;
+import algoritmos.MatrizSecuencial;
+import algoritmos.MatrizPorFilas;
+import componentes.PopupPanel;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 public class Main extends javax.swing.JFrame {
     
@@ -20,14 +15,14 @@ public class Main extends javax.swing.JFrame {
     private int[][] matrizB;
     private PopupPanel objPopup;
     private MatrizSecuencial objSecuencial;
-    private MatrizConcurrente objConcurrente;
+    private MatrizPorFilas objConcurrente;
     private MatrizPorBloques objPorBloques;
     
     public Main() {
         initComponents();
         objPopup = new PopupPanel();
         objSecuencial = new MatrizSecuencial();
-        objConcurrente = new MatrizConcurrente();
+        objConcurrente = new MatrizPorFilas();
         objPorBloques = new MatrizPorBloques();
     }
     
@@ -37,7 +32,7 @@ public class Main extends javax.swing.JFrame {
 
         btnGroupAlgoritmos = new javax.swing.ButtonGroup();
         background = new javax.swing.JPanel();
-        pnlPreviewMatriz = new main.PreviewPanel();
+        pnlPreviewMatriz = new componentes.PreviewPanel();
         pnlLateral = new javax.swing.JPanel();
         pnlAlgoritmos = new javax.swing.JPanel();
         radioSecuencial = new javax.swing.JRadioButton();
@@ -404,7 +399,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMatrizA;
     private javax.swing.JPanel pnlMatrizB;
     private javax.swing.JPanel pnlMonitor;
-    private main.PreviewPanel pnlPreviewMatriz;
+    private componentes.PreviewPanel pnlPreviewMatriz;
     private javax.swing.JRadioButton radioBloques;
     private javax.swing.JRadioButton radioFilas;
     private javax.swing.JRadioButton radioSecuencial;

@@ -1,4 +1,4 @@
-package main;
+package componentes;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,7 +11,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,9 +21,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
+import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -490,3 +487,41 @@ public class PreviewPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
+
+class Celda {
+    
+    private int valor;
+    private Color color;
+
+    public Celda(Color bgColor) {
+        this.color = bgColor;
+    }
+    
+    public Celda(int valor) {
+        this.valor = valor;
+        this.color = new Color(210, 210, 210);
+    }
+
+    public void setRandomColorCelda() {
+        Random rand = new Random();
+
+        this.color = Color.getHSBColor(rand.nextFloat(), 1, 1);
+    }
+
+    public int getValor() {
+        return valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+}
+
