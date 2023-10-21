@@ -54,8 +54,6 @@ public class Main extends javax.swing.JFrame {
         pnlMatrizB = new javax.swing.JPanel();
         pnlMatrizA = new javax.swing.JPanel();
         btnAplicarCambios = new javax.swing.JButton();
-        lblMatrizB = new javax.swing.JLabel();
-        lblMatrizA = new javax.swing.JLabel();
         btnHistorial = new javax.swing.JButton();
         btnComenzar = new javax.swing.JButton();
 
@@ -66,7 +64,7 @@ public class Main extends javax.swing.JFrame {
         background.setBackground(new java.awt.Color(255, 255, 255));
         background.setLayout(null);
         background.add(pnlPreviewMatriz);
-        pnlPreviewMatriz.setBounds(10, 10, 800, 835);
+        pnlPreviewMatriz.setBounds(10, 10, 800, 690);
 
         pnlLateral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -84,7 +82,7 @@ public class Main extends javax.swing.JFrame {
                 radioSecuencialActionPerformed(evt);
             }
         });
-        pnlAlgoritmos.add(radioSecuencial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 300, -1));
+        pnlAlgoritmos.add(radioSecuencial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 300, -1));
 
         btnGroupAlgoritmos.add(radioBloques);
         radioBloques.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -96,7 +94,7 @@ public class Main extends javax.swing.JFrame {
                 radioBloquesActionPerformed(evt);
             }
         });
-        pnlAlgoritmos.add(radioBloques, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 300, -1));
+        pnlAlgoritmos.add(radioBloques, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 300, -1));
 
         btnGroupAlgoritmos.add(radioFilas);
         radioFilas.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -108,16 +106,16 @@ public class Main extends javax.swing.JFrame {
                 radioFilasActionPerformed(evt);
             }
         });
-        pnlAlgoritmos.add(radioFilas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 300, -1));
+        pnlAlgoritmos.add(radioFilas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 300, -1));
 
-        pnlLateral.add(pnlAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 160));
+        pnlLateral.add(pnlAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 340, 120));
 
         pnlMonitor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Monitor", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlMonitor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblNumHilos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblNumHilos.setText("Numero de hilos: 1");
-        pnlMonitor.add(lblNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 290, 30));
+        pnlMonitor.add(lblNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 25, 290, 20));
 
         sliderNumHilos.setMajorTickSpacing(2);
         sliderNumHilos.setMaximum(20);
@@ -138,12 +136,12 @@ public class Main extends javax.swing.JFrame {
                 sliderNumHilosMouseReleased(evt);
             }
         });
-        pnlMonitor.add(sliderNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 290, -1));
+        pnlMonitor.add(sliderNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 290, -1));
 
         pnlContenedorHilos.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMonitor.add(pnlContenedorHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 290, 100));
+        pnlMonitor.add(pnlContenedorHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 290, 100));
 
-        pnlLateral.add(pnlMonitor, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 330, 250));
+        pnlLateral.add(pnlMonitor, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 150, 330, 230));
 
         pnlConfiguracion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuracion", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlConfiguracion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -157,7 +155,7 @@ public class Main extends javax.swing.JFrame {
                 btnDelMatrizBActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnDelMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 60, 60, 20));
+        pnlConfiguracion.add(btnDelMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 30, 60, 20));
 
         btnGenMatrizB.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         btnGenMatrizB.setText("Generar");
@@ -168,7 +166,7 @@ public class Main extends javax.swing.JFrame {
                 btnGenMatrizBActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnGenMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 70, 20));
+        pnlConfiguracion.add(btnGenMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 70, 20));
 
         btnDelMatrizA.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         btnDelMatrizA.setText("Borrar");
@@ -179,7 +177,7 @@ public class Main extends javax.swing.JFrame {
                 btnDelMatrizAActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnDelMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 60, 60, 20));
+        pnlConfiguracion.add(btnDelMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 60, 20));
 
         btnGenMatrizA.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         btnGenMatrizA.setText("Generar");
@@ -190,30 +188,20 @@ public class Main extends javax.swing.JFrame {
                 btnGenMatrizAActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 70, 20));
+        pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 70, 20));
 
         pnlMatrizB.setBackground(new java.awt.Color(255, 255, 255));
         pnlMatrizB.setLayout(new java.awt.BorderLayout());
-        pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 90, 135, 135));
+        pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(185, 60, 120, 120));
 
         pnlMatrizA.setBackground(new java.awt.Color(255, 255, 255));
         pnlMatrizA.setLayout(new java.awt.BorderLayout());
-        pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 135, 135));
+        pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 60, 120, 120));
 
         btnAplicarCambios.setText("Aplicar cambios");
         btnAplicarCambios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAplicarCambios.setFocusPainted(false);
-        pnlConfiguracion.add(btnAplicarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 135, 30));
-
-        lblMatrizB.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblMatrizB.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMatrizB.setText("Matriz B");
-        pnlConfiguracion.add(lblMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 32, 130, 20));
-
-        lblMatrizA.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblMatrizA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMatrizA.setText("Matriz A");
-        pnlConfiguracion.add(lblMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 32, 130, 20));
+        pnlConfiguracion.add(btnAplicarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 120, 30));
 
         btnHistorial.setText("Historial");
         btnHistorial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -223,9 +211,9 @@ public class Main extends javax.swing.JFrame {
                 btnHistorialActionPerformed(evt);
             }
         });
-        pnlConfiguracion.add(btnHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, 135, 30));
+        pnlConfiguracion.add(btnHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(185, 190, 120, 30));
 
-        pnlLateral.add(pnlConfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 330, 290));
+        pnlLateral.add(pnlConfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 390, 330, 230));
 
         btnComenzar.setText("Comenzar");
         btnComenzar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -235,12 +223,12 @@ public class Main extends javax.swing.JFrame {
                 btnComenzarActionPerformed(evt);
             }
         });
-        pnlLateral.add(btnComenzar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 773, 350, 50));
+        pnlLateral.add(btnComenzar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 630, 350, 50));
 
         background.add(pnlLateral);
-        pnlLateral.setBounds(820, 10, 370, 835);
+        pnlLateral.setBounds(820, 10, 370, 690);
 
-        getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 850));
+        getContentPane().add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 710));
 
         pack();
         setLocationRelativeTo(null);
@@ -434,8 +422,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnGenMatrizB;
     private javax.swing.ButtonGroup btnGroupAlgoritmos;
     private javax.swing.JButton btnHistorial;
-    private javax.swing.JLabel lblMatrizA;
-    private javax.swing.JLabel lblMatrizB;
     private javax.swing.JLabel lblNumHilos;
     private javax.swing.JPanel pnlAlgoritmos;
     private javax.swing.JPanel pnlConfiguracion;
