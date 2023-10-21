@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -21,12 +22,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 
 public class PreviewPanel extends javax.swing.JPanel {
 
     private double zoom = 1.0;
+    private double velocidad = 1.0;
     private drawPreview drawPreview;
     private Celda[][] matriz;
 
@@ -80,6 +89,15 @@ public class PreviewPanel extends javax.swing.JPanel {
                 int y = e.getY();
 
                 System.out.println("Click en: " + x + ", " + y);
+            }
+        });
+
+        // BOTON DE CONFIGURACION ----------------------------------------------
+        configButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Popup objPopup = new Popup();
+                objPopup.showPopup();
             }
         });
 
@@ -137,8 +155,8 @@ public class PreviewPanel extends javax.swing.JPanel {
             public void mouseDragged(MouseEvent e) {
                 if (puntoInicio != null) {
                     puntoFin = e.getPoint();
-                    int deltaX = (int) ((puntoFin.getX() - puntoInicio.getX()));
-                    int deltaY = (int) ((puntoFin.getY() - puntoInicio.getY()));
+                    int deltaX = (int) ((puntoFin.getX() - puntoInicio.getX()) * velocidad);
+                    int deltaY = (int) ((puntoFin.getY() - puntoInicio.getY()) * velocidad);
                     offsetX -= deltaX;
                     offsetY -= deltaY;
 
@@ -224,6 +242,22 @@ public class PreviewPanel extends javax.swing.JPanel {
                 }
             }
         }
+    }
+
+    public int getTamañoCelda() {
+        return tamañoCelda;
+    }
+
+    public void setTamañoCelda(int tamañoCelda) {
+        this.tamañoCelda = tamañoCelda;
+    }
+
+    public int getSeparacionCeldas() {
+        return separacionCeldas;
+    }
+
+    public void setSeparacionCeldas(int separacionCeldas) {
+        this.separacionCeldas = separacionCeldas;
     }
 
     class Controles extends JPanel {
@@ -325,20 +359,124 @@ public class PreviewPanel extends javax.swing.JPanel {
         }
     }
 
-    public int getTamañoCelda() {
-        return tamañoCelda;
-    }
+    class Popup extends JPanel {
 
-    public void setTamañoCelda(int tamañoCelda) {
-        this.tamañoCelda = tamañoCelda;
-    }
+        private JDialog popup;
 
-    public int getSeparacionCeldas() {
-        return separacionCeldas;
-    }
+        public Popup() {
+            initComponents();
+            initPopup();
+        }
 
-    public void setSeparacionCeldas(int separacionCeldas) {
-        this.separacionCeldas = separacionCeldas;
+        public void initPopup() {
+            popup = new JDialog();
+            popup.setTitle("Popup");
+            popup.setModal(true);
+            popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+            btnAceptar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    velocidad = sliderVelocidad.getValue() / 100;
+                    popup.dispose();
+                }
+            });
+        }
+
+        public void showPopup() {
+            int popupWidth = 400;
+            int popupHeight = 150;
+
+            popup.setSize(new Dimension(popupWidth, popupHeight + 40));
+            popup.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+
+            int pnlMensajeHeight = (int) (popupHeight * 0.80);
+            int pnlControlesHeight = (int) (popupHeight * 0.20);
+
+            setPreferredSize(new Dimension(popupWidth, popupHeight));
+            pnlControles.setPreferredSize(new Dimension(popupWidth, pnlControlesHeight));
+            pnlMensaje.setPreferredSize(new Dimension(popupWidth, pnlMensajeHeight));
+
+            centrarPopup();
+            popup.add(this);
+            popup.setVisible(true);
+        }
+
+        public void centrarPopup() {
+            Dimension pantallaSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int centerX = (int) ((pantallaSize.getWidth() - popup.getWidth()) / 2);
+            int centerY = (int) ((pantallaSize.getHeight() - popup.getHeight()) / 2);
+            popup.setLocation(centerX, centerY);
+        }
+
+        public void initComponents() {
+
+            pnlMensaje = new JPanel();
+            pnlSeparacion1 = new JPanel();
+            lblVelocidad = new JLabel();
+            pnlSeparacion2 = new JPanel();
+            sliderVelocidad = new JSlider();
+            pnlControles = new JPanel();
+            btnAceptar = new JButton();
+            btnCancelar = new JButton();
+
+            FlowLayout flowLayout2 = new FlowLayout(FlowLayout.CENTER, 0, 0);
+            flowLayout2.setAlignOnBaseline(true);
+            setLayout(flowLayout2);
+
+            pnlMensaje.setBackground(new Color(255, 255, 255));
+            pnlMensaje.setPreferredSize(new Dimension(400, 250));
+            pnlMensaje.setLayout(new FlowLayout(FlowLayout.CENTER, 60, 0));
+
+            pnlSeparacion1.setBackground(new Color(255, 255, 255));
+            pnlSeparacion1.setPreferredSize(new Dimension(1000, 20));
+            pnlMensaje.add(pnlSeparacion1);
+
+            lblVelocidad.setFont(new Font("Arial", 0, 14)); // NOI18N
+            lblVelocidad.setHorizontalAlignment(SwingConstants.CENTER);
+            lblVelocidad.setText("Velocidad de Zoom");
+            pnlMensaje.add(lblVelocidad);
+
+            pnlSeparacion2.setBackground(new Color(255, 255, 255));
+            pnlSeparacion2.setPreferredSize(new Dimension(1000, 20));
+            pnlMensaje.add(pnlSeparacion2);
+
+            sliderVelocidad.setBackground(new java.awt.Color(255, 255, 255));
+            sliderVelocidad.setMajorTickSpacing(100);
+            sliderVelocidad.setMaximum(500);
+            sliderVelocidad.setMinimum(100);
+            sliderVelocidad.setPaintTicks(true);
+            sliderVelocidad.setSnapToTicks(true);
+            sliderVelocidad.setValue((int)velocidad * 100);
+            sliderVelocidad.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
+            sliderVelocidad.setFocusable(false);
+            pnlMensaje.add(sliderVelocidad);
+
+            add(pnlMensaje);
+
+            pnlControles.setPreferredSize(new Dimension(400, 50));
+            FlowLayout flowLayout1 = new FlowLayout(FlowLayout.CENTER, 120, 5);
+            flowLayout1.setAlignOnBaseline(true);
+            pnlControles.setLayout(flowLayout1);
+
+            btnAceptar.setText("Aceptar");
+            pnlControles.add(btnAceptar);
+
+            btnCancelar.setText("Cancelar");
+            pnlControles.add(btnCancelar);
+
+            add(pnlControles);
+        }
+
+        //<editor-fold defaultstate="collapsed" desc="Declaracion de variables">  
+        private JButton btnAceptar;
+        private JButton btnCancelar;
+        private JLabel lblVelocidad;
+        private JPanel pnlControles;
+        private JPanel pnlMensaje;
+        private JPanel pnlSeparacion1;
+        private JPanel pnlSeparacion2;
+        private JSlider sliderVelocidad;
+        //</editor-fold>  
     }
 
     @SuppressWarnings("unchecked")

@@ -15,20 +15,22 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 public class Main extends javax.swing.JFrame {
-
+    
     private int[][] matrizA;
     private int[][] matrizB;
+    private PopupPanel objPopup;
     private MatrizSecuencial objSecuencial;
     private MatrizConcurrente objConcurrente;
     private MatrizPorBloques objPorBloques;
-
+    
     public Main() {
         initComponents();
+        objPopup = new PopupPanel();
         objSecuencial = new MatrizSecuencial();
         objConcurrente = new MatrizConcurrente();
         objPorBloques = new MatrizPorBloques();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -243,7 +245,7 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Las matrices no pueden ser con filas/columnas 0.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        
         matrizB = generarMatriz(filas, columnas);
         pnlMatrizB.add(new panelMatriz(filas + "x" + columnas));
         pnlMatrizB.repaint();
@@ -264,7 +266,7 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Las matrices no pueden ser con filas/columnas 0.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        
         matrizA = generarMatriz(filas, columnas);
         pnlMatrizA.add(new panelMatriz(filas + "x" + columnas));
         pnlMatrizA.repaint();
@@ -284,21 +286,21 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Una de las matrices esta vacia.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        
         int[][] matrizResultante;
         if (radioSecuencial.isSelected()) {
             matrizResultante = objSecuencial.multiplicar(matrizA, matrizB);
-
+            
             pnlPreviewMatriz.setMatriz(matrizResultante);
         } else if (radioFilas.isSelected()) {
             objConcurrente.setNumHilos(sliderNumHilos.getValue());
             matrizResultante = objConcurrente.multiplicar(matrizA, matrizB);
-
+            
             pnlPreviewMatriz.setMatriz(matrizResultante);
         } else if (radioBloques.isSelected()) {
             objPorBloques.setNumBloques(16);
             matrizResultante = objPorBloques.multiplicar(matrizA, matrizB);
-
+            
             pnlPreviewMatriz.setMatriz(matrizResultante);
         }
     }//GEN-LAST:event_btnComenzarActionPerformed
@@ -311,7 +313,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDelMatrizBActionPerformed
 
     private void btnDelMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizAActionPerformed
-        showPopup(this);
+        objPopup.showPopup("Matriz Eliminada");
         matrizA = null;
         pnlMatrizA.removeAll();
         pnlMatrizA.repaint();
@@ -325,60 +327,19 @@ public class Main extends javax.swing.JFrame {
     private void radioFilasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioFilasActionPerformed
         habilitarMonitor();
     }//GEN-LAST:event_radioFilasActionPerformed
-
-    public static void showPopup(JFrame parentFrame) {
-        JDialog popup = new JDialog(parentFrame, "Popup Window", true);
-        popup.setSize(300, 150);
-        popup.setLayout(new FlowLayout());
-
-        JLabel label = new JLabel("Enter something:");
-        JTextField textField = new JTextField(20);
-
-        JRadioButton radio1 = new JRadioButton("Option 1");
-        JRadioButton radio2 = new JRadioButton("Option 2");
-
-        ButtonGroup radioGroup = new ButtonGroup();
-        radioGroup.add(radio1);
-        radioGroup.add(radio2);
-
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Acciones a realizar al presionar el botón OK
-                String inputText = textField.getText();
-                boolean option1Selected = radio1.isSelected();
-                boolean option2Selected = radio2.isSelected();
-
-                // Aquí puedes procesar los valores ingresados
-                System.out.println("Input Text: " + inputText);
-                System.out.println("Option 1 Selected: " + option1Selected);
-                System.out.println("Option 2 Selected: " + option2Selected);
-
-                popup.dispose(); // Cierra la ventana emergente
-            }
-        });
-
-        popup.add(label);
-        popup.add(textField);
-        popup.add(radio1);
-        popup.add(radio2);
-        popup.add(okButton);
-
-        popup.setVisible(true);
-    }
-
+    
     public void habilitarMonitor() {
         this.sliderNumHilos.setEnabled(true);
     }
-
+    
     public void deshabilitarMonitor() {
         this.sliderNumHilos.setEnabled(false);
     }
-
+    
     public int[][] generarMatriz(int filas, int columnas) {
         int[][] matrizTemp = new int[filas][columnas];
         Random random = new Random();
-
+        
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 matrizTemp[i][j] = random.nextInt(10);
@@ -386,7 +347,7 @@ public class Main extends javax.swing.JFrame {
         }
         return matrizTemp;
     }
-
+    
     public void imprimirMatriz(int[][] matrizResultante) {
         for (int i = 0; i < matrizResultante.length; i++) {
             for (int j = 0; j < matrizResultante[0].length; j++) {
@@ -395,9 +356,9 @@ public class Main extends javax.swing.JFrame {
             System.out.println("");
         }
     }
-
+    
     public static void main(String args[]) {
-
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
