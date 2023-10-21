@@ -8,10 +8,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class MatrizPorFilas {
-    
+
+    private int tiempoEjecucion;
     private int numHilos;
-    
+
     public MatrizPorFilas() {
+        this.tiempoEjecucion = 0;
         this.numHilos = 8;
     }
 
@@ -57,8 +59,8 @@ public class MatrizPorFilas {
         }
 
         long tiempoFinal = System.currentTimeMillis();  // CONTADOR FINALIZA ------------------------------------------
-        long tiempoTranscurrido = tiempoFinal - tiempoInicio;
-        System.out.println("Tiempo de cálculo: " + tiempoTranscurrido + " milisegundos");
+        tiempoEjecucion = (int) (tiempoFinal - tiempoInicio);
+        System.out.println("Tiempo de calculo: " + tiempoEjecucion + " milisegundos");
 
         return resultante;
     }
@@ -111,15 +113,6 @@ public class MatrizPorFilas {
 //        return resultante;
 //    }
     // </editor-fold>  
-
-    public int getNumHilos() {
-        return numHilos;
-    }
-
-    public void setNumHilos(int numHilos) {
-        this.numHilos = numHilos;
-    }
-       
     public int[][] generarMatriz(int filas, int columnas) {
         int[][] matrizTemp = new int[filas][columnas];
         Random random = new Random();
@@ -146,4 +139,21 @@ public class MatrizPorFilas {
             System.out.println("");
         }
     }
+
+    public int getNumHilos() {
+        return numHilos;
+    }
+
+    public void setNumHilos(int numHilos) {
+        this.numHilos = numHilos;
+    }
+
+    public int getTiempoEjecucion() {
+        return tiempoEjecucion;
+    }
+
+    public void setTiempoEjecucion(int tiempoEjecucion) {
+        this.tiempoEjecucion = tiempoEjecucion;
+    }
+
 }

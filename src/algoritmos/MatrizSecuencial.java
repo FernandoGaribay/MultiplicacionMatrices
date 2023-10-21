@@ -4,8 +4,10 @@ import java.util.Random;
 
 public class MatrizSecuencial {
 
+    private int tiempoEjecucion;
+    
     public MatrizSecuencial() {
-
+        this.tiempoEjecucion = 0;
     }
 
     public int[][] multiplicar(int[][] matrizA, int[][] matrizB) {
@@ -28,8 +30,8 @@ public class MatrizSecuencial {
             }
         }
         long tiempoFinal = System.currentTimeMillis();
-        long tiempoTranscurrido = tiempoFinal - tiempoInicio;
-        System.out.println("Tiempo de calculo: " + tiempoTranscurrido + " milisegundos");
+        tiempoEjecucion = (int) (tiempoFinal - tiempoInicio);
+        System.out.println("Tiempo de calculo: " + tiempoEjecucion + " milisegundos");
 
         return resultante;
     }
@@ -59,6 +61,14 @@ public class MatrizSecuencial {
             }
             System.out.println("");
         }
+    }
+
+    public int getTiempoEjecucion() {
+        return tiempoEjecucion;
+    }
+
+    public void setTiempoEjecucion(int tiempoEjecucion) {
+        this.tiempoEjecucion = tiempoEjecucion;
     }
 
 }

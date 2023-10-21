@@ -9,10 +9,12 @@ import java.util.concurrent.Future;
 
 public class MatrizPorBloques {
 
+    private int tiempoEjecucion;
     private int numBloques;
 
     public MatrizPorBloques() {
-        this.numBloques = 16;
+        this.tiempoEjecucion = 0;
+        this.numBloques = 8;
     }
 
     public int[][] multiplicar(int[][] matrizA, int[][] matrizB) {
@@ -24,7 +26,6 @@ public class MatrizPorBloques {
         List<Future> resultados = new ArrayList<>();
         int filasA = matrizA.length;
         int columnasA = matrizA[0].length;
-        int filasB = matrizB.length;
         int columnasB = matrizB[0].length;
         int[][] resultante = new int[filasA][columnasB];
         int volumenBloque = filasA / numBloques;
@@ -64,18 +65,10 @@ public class MatrizPorBloques {
         }
 
         long tiempoFinal = System.currentTimeMillis();  // CONTADOR FINALIZA ------------------------------------------
-        long tiempoTranscurrido = tiempoFinal - tiempoInicio;
-        System.out.println("Tiempo de cálculo: " + tiempoTranscurrido + " milisegundos");
+        tiempoEjecucion = (int) (tiempoFinal - tiempoInicio);
+        System.out.println("Tiempo de calculo: " + tiempoEjecucion + " milisegundos");
 
         return resultante;
-    }
-
-    public int getNumBloques() {
-        return numBloques;
-    }
-
-    public void setNumBloques(int numBloques) {
-        this.numBloques = numBloques;
     }
 
     public int[][] generarMatriz(int filas, int columnas) {
@@ -92,8 +85,8 @@ public class MatrizPorBloques {
 
     public static void main(String[] args) {
         MatrizPorFilas matrizConcurrente = new MatrizPorFilas();
-        int[][] matrizA = matrizConcurrente.generarMatriz(100, 5000);
-        int[][] matrizB = matrizConcurrente.generarMatriz(3000, 100);
+        int[][] matrizA = matrizConcurrente.generarMatriz(1000, 1000);
+        int[][] matrizB = matrizConcurrente.generarMatriz(1000, 1000);
 
         int[][] matrizR = matrizConcurrente.multiplicar(matrizA, matrizB);
 
@@ -103,5 +96,21 @@ public class MatrizPorBloques {
             }
             System.out.println("");
         }
+    }
+
+    public int getNumBloques() {
+        return numBloques;
+    }
+
+    public void setNumBloques(int numBloques) {
+        this.numBloques = numBloques;
+    }
+
+    public int getTiempoEjecucion() {
+        return tiempoEjecucion;
+    }
+
+    public void setTiempoEjecucion(int tiempoEjecucion) {
+        this.tiempoEjecucion = tiempoEjecucion;
     }
 }

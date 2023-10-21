@@ -6,26 +6,30 @@ import algoritmos.MatrizSecuencial;
 import algoritmos.MatrizPorFilas;
 import componentes.PopupPanel;
 import java.awt.HeadlessException;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 
 public class Main extends javax.swing.JFrame {
-    
+
     private int[][] matrizA;
     private int[][] matrizB;
+    private ArrayList<Integer> tiemposEjecucion;
     private PopupPanel objPopup;
     private MatrizSecuencial objSecuencial;
     private MatrizPorFilas objConcurrente;
     private MatrizPorBloques objPorBloques;
-    
+
     public Main() {
         initComponents();
+        tiemposEjecucion = new ArrayList<Integer>();
         objPopup = new PopupPanel();
         objSecuencial = new MatrizSecuencial();
         objConcurrente = new MatrizPorFilas();
         objPorBloques = new MatrizPorBloques();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -52,6 +56,7 @@ public class Main extends javax.swing.JFrame {
         btnAplicarCambios = new javax.swing.JButton();
         lblMatrizB = new javax.swing.JLabel();
         lblMatrizA = new javax.swing.JLabel();
+        btnHistorial = new javax.swing.JButton();
         btnComenzar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -86,6 +91,11 @@ public class Main extends javax.swing.JFrame {
         radioBloques.setText("Algoritmo por Bloques");
         radioBloques.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         radioBloques.setFocusPainted(false);
+        radioBloques.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioBloquesActionPerformed(evt);
+            }
+        });
         pnlAlgoritmos.add(radioBloques, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 300, -1));
 
         btnGroupAlgoritmos.add(radioFilas);
@@ -193,7 +203,7 @@ public class Main extends javax.swing.JFrame {
         btnAplicarCambios.setText("Aplicar cambios");
         btnAplicarCambios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAplicarCambios.setFocusPainted(false);
-        pnlConfiguracion.add(btnAplicarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 295, 30));
+        pnlConfiguracion.add(btnAplicarCambios, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 135, 30));
 
         lblMatrizB.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblMatrizB.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -204,6 +214,16 @@ public class Main extends javax.swing.JFrame {
         lblMatrizA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblMatrizA.setText("Matriz A");
         pnlConfiguracion.add(lblMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 32, 130, 20));
+
+        btnHistorial.setText("Historial");
+        btnHistorial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHistorial.setFocusPainted(false);
+        btnHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistorialActionPerformed(evt);
+            }
+        });
+        pnlConfiguracion.add(btnHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, 135, 30));
 
         pnlLateral.add(pnlConfiguracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 330, 290));
 
@@ -240,7 +260,7 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Las matrices no pueden ser con filas/columnas 0.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         matrizB = generarMatriz(filas, columnas);
         pnlMatrizB.add(new panelMatriz(filas + "x" + columnas));
         pnlMatrizB.repaint();
@@ -261,7 +281,7 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Las matrices no pueden ser con filas/columnas 0.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         matrizA = generarMatriz(filas, columnas);
         pnlMatrizA.add(new panelMatriz(filas + "x" + columnas));
         pnlMatrizA.repaint();
@@ -277,27 +297,43 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderNumHilosMouseReleased
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
-        if (matrizA == null || matrizB == null) {
-            JOptionPane.showMessageDialog(this, "Una de las matrices esta vacia.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        int[][] matrizResultante;
-        if (radioSecuencial.isSelected()) {
-            matrizResultante = objSecuencial.multiplicar(matrizA, matrizB);
-            
-            pnlPreviewMatriz.setMatriz(matrizResultante);
-        } else if (radioFilas.isSelected()) {
-            objConcurrente.setNumHilos(sliderNumHilos.getValue());
-            matrizResultante = objConcurrente.multiplicar(matrizA, matrizB);
-            
-            pnlPreviewMatriz.setMatriz(matrizResultante);
-        } else if (radioBloques.isSelected()) {
-            objPorBloques.setNumBloques(16);
-            matrizResultante = objPorBloques.multiplicar(matrizA, matrizB);
-            
-            pnlPreviewMatriz.setMatriz(matrizResultante);
-        }
+        // Event Dispatch Thread (EDT)
+
+        // Se especifica que trabajara con una matriz y con un metodo void para actualizar la interfaz        
+        SwingWorker<Integer, Void> worker = new SwingWorker<Integer, Void>() {
+            int tiempoEjecucion = 0;
+            int[][] matrizResultante = null;
+
+            @Override
+            protected Integer doInBackground() {
+                if (radioSecuencial.isSelected()) {
+                    matrizResultante = objSecuencial.multiplicar(matrizA, matrizB);
+                    tiempoEjecucion = objSecuencial.getTiempoEjecucion();
+                } else if (radioFilas.isSelected()) {
+                    objConcurrente.setNumHilos(sliderNumHilos.getValue());
+                    matrizResultante = objConcurrente.multiplicar(matrizA, matrizB);
+                    tiempoEjecucion = objConcurrente.getTiempoEjecucion();
+                } else if (radioBloques.isSelected()) {
+                    objPorBloques.setNumBloques(sliderNumHilos.getValue());
+                    matrizResultante = objPorBloques.multiplicar(matrizA, matrizB);
+                    tiempoEjecucion = objPorBloques.getTiempoEjecucion();
+                }
+                return 0;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    get(); // Obtiene la señar de que el proceso de doInBackground finalizo
+                    pnlPreviewMatriz.setMatriz(matrizResultante);
+                    JOptionPane.showMessageDialog(null, "Tiempo de ejecucion: " + tiempoEjecucion);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute(); // Inicia el SwingWorker en un hilo separado
     }//GEN-LAST:event_btnComenzarActionPerformed
 
     private void btnDelMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizBActionPerformed
@@ -322,19 +358,27 @@ public class Main extends javax.swing.JFrame {
     private void radioFilasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioFilasActionPerformed
         habilitarMonitor();
     }//GEN-LAST:event_radioFilasActionPerformed
-    
+
+    private void radioBloquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBloquesActionPerformed
+        habilitarMonitor();
+    }//GEN-LAST:event_radioBloquesActionPerformed
+
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+
+    }//GEN-LAST:event_btnHistorialActionPerformed
+
     public void habilitarMonitor() {
         this.sliderNumHilos.setEnabled(true);
     }
-    
+
     public void deshabilitarMonitor() {
         this.sliderNumHilos.setEnabled(false);
     }
-    
+
     public int[][] generarMatriz(int filas, int columnas) {
         int[][] matrizTemp = new int[filas][columnas];
         Random random = new Random();
-        
+
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 matrizTemp[i][j] = random.nextInt(10);
@@ -342,7 +386,7 @@ public class Main extends javax.swing.JFrame {
         }
         return matrizTemp;
     }
-    
+
     public void imprimirMatriz(int[][] matrizResultante) {
         for (int i = 0; i < matrizResultante.length; i++) {
             for (int j = 0; j < matrizResultante[0].length; j++) {
@@ -351,9 +395,9 @@ public class Main extends javax.swing.JFrame {
             System.out.println("");
         }
     }
-    
+
     public static void main(String args[]) {
-        
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
@@ -389,6 +433,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnGenMatrizA;
     private javax.swing.JButton btnGenMatrizB;
     private javax.swing.ButtonGroup btnGroupAlgoritmos;
+    private javax.swing.JButton btnHistorial;
     private javax.swing.JLabel lblMatrizA;
     private javax.swing.JLabel lblMatrizB;
     private javax.swing.JLabel lblNumHilos;
