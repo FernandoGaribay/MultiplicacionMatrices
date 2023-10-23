@@ -13,8 +13,8 @@ import javax.swing.SwingWorker;
 
 public class Main extends javax.swing.JFrame {
 
-    private int[][] matrizA;
-    private int[][] matrizB;
+    private int[][] matrizA = null;
+    private int[][] matrizB = null;
     private ArrayList<Integer> tiemposEjecucion;
     private PopupPanel objPopup;
     private MatrizSecuencial objSecuencial;
@@ -52,7 +52,9 @@ public class Main extends javax.swing.JFrame {
         btnDelMatrizA = new javax.swing.JButton();
         btnGenMatrizA = new javax.swing.JButton();
         pnlMatrizB = new javax.swing.JPanel();
+        panelMatrizB = new componentes.panelMatriz();
         pnlMatrizA = new javax.swing.JPanel();
+        panelMatrizA = new componentes.panelMatriz();
         btnHistorial = new javax.swing.JButton();
         btnComenzar = new javax.swing.JButton();
 
@@ -200,6 +202,8 @@ public class Main extends javax.swing.JFrame {
             }
         });
         pnlMatrizB.setLayout(new java.awt.BorderLayout());
+        pnlMatrizB.add(panelMatrizB, java.awt.BorderLayout.CENTER);
+
         pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 55, 125, 125));
 
         pnlMatrizA.setBackground(new java.awt.Color(255, 255, 255));
@@ -209,6 +213,8 @@ public class Main extends javax.swing.JFrame {
             }
         });
         pnlMatrizA.setLayout(new java.awt.BorderLayout());
+        pnlMatrizA.add(panelMatrizA, java.awt.BorderLayout.CENTER);
+
         pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 55, 125, 125));
 
         btnHistorial.setText("Historial");
@@ -243,8 +249,8 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizBActionPerformed
-        int filas = 0;
-        int columnas = 0;
+        int filas;
+        int columnas;
 
         if (matrizB != null) {
             JOptionPane.showMessageDialog(this, "Ya existe una Matriz B en memoria.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
@@ -263,14 +269,14 @@ public class Main extends javax.swing.JFrame {
         }
 
         matrizB = generarMatriz(filas, columnas);
-        pnlMatrizB.add(new panelMatriz(filas + "x" + columnas));
-        pnlMatrizB.repaint();
-        pnlMatrizB.revalidate();
+        panelMatrizB.setVacio(false);
+        panelMatrizB.setText(filas + "x" + columnas);
+        panelMatrizB.repaint();
     }//GEN-LAST:event_btnGenMatrizBActionPerformed
 
     private void btnGenMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizAActionPerformed
-        int filas = 0;
-        int columnas = 0;
+        int filas;
+        int columnas;
 
         if (matrizA != null) {
             JOptionPane.showMessageDialog(this, "Ya existe una Matriz A en memoria.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
@@ -289,9 +295,9 @@ public class Main extends javax.swing.JFrame {
         }
 
         matrizA = generarMatriz(filas, columnas);
-        pnlMatrizA.add(new panelMatriz(filas + "x" + columnas));
-        pnlMatrizA.repaint();
-        pnlMatrizA.revalidate();
+        panelMatrizA.setVacio(false);
+        panelMatrizA.setText(filas + "x" + columnas);
+        panelMatrizA.repaint();
     }//GEN-LAST:event_btnGenMatrizAActionPerformed
 
     private void sliderNumHilosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderNumHilosStateChanged
@@ -343,19 +349,17 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnComenzarActionPerformed
 
     private void btnDelMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizBActionPerformed
-        JOptionPane.showMessageDialog(this, "Matriz B Eliminada", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(this, "Matriz B Eliminada", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         matrizB = null;
-        pnlMatrizB.removeAll();
-        pnlMatrizB.repaint();
-        pnlMatrizB.revalidate();
+        panelMatrizB.setVacio(true);
+        panelMatrizB.repaint();
     }//GEN-LAST:event_btnDelMatrizBActionPerformed
 
     private void btnDelMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizAActionPerformed
-        JOptionPane.showMessageDialog(this, "Matriz A Eliminada", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(this, "Matriz A Eliminada", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         matrizA = null;
-        pnlMatrizA.removeAll();
-        pnlMatrizA.repaint();
-        pnlMatrizA.revalidate();
+        panelMatrizA.setVacio(true);
+        panelMatrizA.repaint();
     }//GEN-LAST:event_btnDelMatrizAActionPerformed
 
     private void radioSecuencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSecuencialActionPerformed
@@ -377,12 +381,16 @@ public class Main extends javax.swing.JFrame {
     private void pnlMatrizAMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMatrizAMousePressed
         if (matrizA != null) {
             pnlPreviewMatriz.setMatriz(matrizA);
+        } else {
+            pnlPreviewMatriz.setMatrizVacia();
         }
     }//GEN-LAST:event_pnlMatrizAMousePressed
 
     private void pnlMatrizBMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMatrizBMousePressed
         if (matrizB != null) {
             pnlPreviewMatriz.setMatriz(matrizB);
+        } else {
+            pnlPreviewMatriz.setMatrizVacia();
         }
     }//GEN-LAST:event_pnlMatrizBMousePressed
 
@@ -453,6 +461,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.ButtonGroup btnGroupAlgoritmos;
     private javax.swing.JButton btnHistorial;
     private javax.swing.JLabel lblNumHilos;
+    private componentes.panelMatriz panelMatrizA;
+    private componentes.panelMatriz panelMatrizB;
     private javax.swing.JPanel pnlAlgoritmos;
     private javax.swing.JPanel pnlConfiguracion;
     private javax.swing.JPanel pnlContenedorHilos;

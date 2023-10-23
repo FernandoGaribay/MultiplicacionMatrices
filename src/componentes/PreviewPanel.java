@@ -34,7 +34,7 @@ public class PreviewPanel extends javax.swing.JPanel {
 
     private double zoom = 1.0;
     private double velocidad = 1.0;
-    private drawPreview drawPreview;
+    private drawPreview drawPreview = new drawPreview();
     private Celda[][] matriz;
 
     private JButton zoomInButton;
@@ -53,15 +53,14 @@ public class PreviewPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constructor e inicializadores"> 
     public PreviewPanel() {
         initComponents();
-        initGraficos();
+        setMatrizVacia();
         initControles();
         initEventos();
 
         this.add(drawPreview, BorderLayout.CENTER);
     }
 
-    private void initGraficos() {
-        this.drawPreview = new drawPreview();
+    public void setMatrizVacia() {
         this.matriz = new Celda[150][150];
 
         for (int i = 0; i < matriz.length; i++) {
@@ -374,7 +373,7 @@ public class PreviewPanel extends javax.swing.JPanel {
 
             sliderVelocidad.addChangeListener(new javax.swing.event.ChangeListener() {
                 public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                    lblVelocidad.setText("Velocidad de Zoom: x" + sliderVelocidad.getValue() / 100 + ".0");
+                    lblVelocidad.setText("Velocidad de desplazamiento: x" + sliderVelocidad.getValue() / 100 + ".0");
                 }
             });
 
@@ -443,7 +442,7 @@ public class PreviewPanel extends javax.swing.JPanel {
 
             lblVelocidad.setFont(new Font("Arial", 0, 14)); // NOI18N
             lblVelocidad.setHorizontalAlignment(SwingConstants.CENTER);
-            lblVelocidad.setText("Velocidad de Zoom: x1.0");
+            lblVelocidad.setText("Velocidad de desplazamiento: x1.0");
             pnlMensaje.add(lblVelocidad);
 
             pnlSeparacion2.setBackground(new Color(255, 255, 255));

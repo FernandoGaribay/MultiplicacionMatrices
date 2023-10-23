@@ -11,11 +11,13 @@ import javax.swing.JPanel;
 
 public class panelMatriz extends JPanel {
 
+    private boolean vacio;
     private int numCeldas;
     private int separacionCelda;
     private String text;
 
     public panelMatriz() {
+        this.vacio = true;
         this.numCeldas = 10;
         this.separacionCelda = 2;
         this.text = "100x100";
@@ -24,6 +26,7 @@ public class panelMatriz extends JPanel {
     }
 
     public panelMatriz(String text) {
+        this.vacio = true;
         this.numCeldas = 10;
         this.separacionCelda = 2;
         this.text = text;
@@ -34,8 +37,8 @@ public class panelMatriz extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Random random = new Random();
 
+        Random random = new Random();
         int tamanioCelda = getWidth() / numCeldas;
         setBackground(Color.WHITE);
         for (int i = 0; i <= numCeldas; i++) {
@@ -43,27 +46,46 @@ public class panelMatriz extends JPanel {
                 int x = i * (tamanioCelda + separacionCelda);
                 int y = j * (tamanioCelda + separacionCelda);
 
-                float colorValor = random.nextFloat();
-                g.setColor(Color.getHSBColor(colorValor, 0.8f, 1));
+                if (vacio) {
+                    g.setColor(Color.getHSBColor(0, 0f, 0.9f));
+                } else {
+                    float colorValor = random.nextFloat();
+                    g.setColor(Color.getHSBColor(colorValor, 0.8f, 1));
+                }
                 g.fillRect(x, y, tamanioCelda, tamanioCelda);
             }
         }
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        String texto = getText();
-        Font font = new Font("TimesRoman", Font.BOLD, 22);
-        FontMetrics fm = g2d.getFontMetrics(font);
-        int xTexto = (getWidth() - fm.stringWidth(texto)) / 2;
-        int yTexto = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-        
-        g2d.setColor(Color.WHITE);
-        g2d.setFont(font);
-        g2d.drawString(texto, xTexto + 2, yTexto + 2);
+        if (!vacio) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-        g2d.setColor(Color.BLACK);
-        g2d.setFont(font);
-        g2d.drawString(texto, xTexto, yTexto);
+            String texto = getText();
+            Font fontNegro = new Font("TimesRoman", Font.BOLD, 22);
+            Font fontBlanco = new Font("TimesRoman", Font.BOLD, 22);
+
+            FontMetrics fmNegro = g2d.getFontMetrics(fontNegro);
+            FontMetrics fmBlanco = g2d.getFontMetrics(fontBlanco);
+
+            int xTextoN = (getWidth() - fmNegro.stringWidth(texto)) / 2;
+            int yTextoN = (getHeight() + fmNegro.getAscent() - fmNegro.getDescent()) / 2;
+
+            int xTextoB = (getWidth() - fmBlanco.stringWidth(texto)) / 2;
+            int yTextoB = (getHeight() + fmBlanco.getAscent() - fmBlanco.getDescent()) / 2;
+
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(fontBlanco);
+            int bordeAncho = 2;
+            for (int i = -bordeAncho; i <= bordeAncho; i++) {
+                for (int j = -bordeAncho; j <= bordeAncho; j++) {
+                    g2d.drawString(texto, xTextoB + i, yTextoB + j);
+                }
+            }
+
+            g2d.setColor(Color.BLACK);
+            g2d.setFont(fontNegro);
+            g2d.drawString(texto, xTextoN, yTextoN);
+        }
     }
 
     public String getText() {
@@ -74,4 +96,11 @@ public class panelMatriz extends JPanel {
         this.text = tamanio;
     }
 
+    public boolean isVacio() {
+        return vacio;
+    }
+
+    public void setVacio(boolean vacio) {
+        this.vacio = vacio;
+    }
 }
