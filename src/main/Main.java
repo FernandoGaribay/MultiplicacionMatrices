@@ -194,10 +194,20 @@ public class Main extends javax.swing.JFrame {
         pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 80, 20));
 
         pnlMatrizB.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMatrizB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                pnlMatrizBMousePressed(evt);
+            }
+        });
         pnlMatrizB.setLayout(new java.awt.BorderLayout());
         pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 55, 125, 125));
 
         pnlMatrizA.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMatrizA.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                pnlMatrizAMousePressed(evt);
+            }
+        });
         pnlMatrizA.setLayout(new java.awt.BorderLayout());
         pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 55, 125, 125));
 
@@ -235,6 +245,11 @@ public class Main extends javax.swing.JFrame {
     private void btnGenMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizBActionPerformed
         int filas = 0;
         int columnas = 0;
+
+        if (matrizB != null) {
+            JOptionPane.showMessageDialog(this, "Ya existe una Matriz B en memoria.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         try {
             filas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de filas: "));
             columnas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de columnas: "));
@@ -256,6 +271,11 @@ public class Main extends javax.swing.JFrame {
     private void btnGenMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizAActionPerformed
         int filas = 0;
         int columnas = 0;
+
+        if (matrizA != null) {
+            JOptionPane.showMessageDialog(this, "Ya existe una Matriz A en memoria.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         try {
             filas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de filas: "));
             columnas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de columnas: "));
@@ -353,6 +373,18 @@ public class Main extends javax.swing.JFrame {
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
 
     }//GEN-LAST:event_btnHistorialActionPerformed
+
+    private void pnlMatrizAMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMatrizAMousePressed
+        if (matrizA != null) {
+            pnlPreviewMatriz.setMatriz(matrizA);
+        }
+    }//GEN-LAST:event_pnlMatrizAMousePressed
+
+    private void pnlMatrizBMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMatrizBMousePressed
+        if (matrizB != null) {
+            pnlPreviewMatriz.setMatriz(matrizB);
+        }
+    }//GEN-LAST:event_pnlMatrizBMousePressed
 
     public void habilitarMonitor() {
         this.sliderNumHilos.setEnabled(true);

@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeListener;
 
 public class PreviewPanel extends javax.swing.JPanel {
 
@@ -371,9 +372,21 @@ public class PreviewPanel extends javax.swing.JPanel {
             popup.setModal(true);
             popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
+            sliderVelocidad.addChangeListener(new javax.swing.event.ChangeListener() {
+                public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                    lblVelocidad.setText("Velocidad de Zoom: x" + sliderVelocidad.getValue() / 100 + ".0");
+                }
+            });
+
             btnAceptar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     velocidad = sliderVelocidad.getValue() / 100;
+                    popup.dispose();
+                }
+            });
+
+            btnCancelar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
                     popup.dispose();
                 }
             });
@@ -430,7 +443,7 @@ public class PreviewPanel extends javax.swing.JPanel {
 
             lblVelocidad.setFont(new Font("Arial", 0, 14)); // NOI18N
             lblVelocidad.setHorizontalAlignment(SwingConstants.CENTER);
-            lblVelocidad.setText("Velocidad de Zoom");
+            lblVelocidad.setText("Velocidad de Zoom: x1.0");
             pnlMensaje.add(lblVelocidad);
 
             pnlSeparacion2.setBackground(new Color(255, 255, 255));
@@ -443,7 +456,7 @@ public class PreviewPanel extends javax.swing.JPanel {
             sliderVelocidad.setMinimum(100);
             sliderVelocidad.setPaintTicks(true);
             sliderVelocidad.setSnapToTicks(true);
-            sliderVelocidad.setValue((int)velocidad * 100);
+            sliderVelocidad.setValue((int) velocidad * 100);
             sliderVelocidad.setCursor(new java.awt.Cursor(Cursor.HAND_CURSOR));
             sliderVelocidad.setFocusable(false);
             pnlMensaje.add(sliderVelocidad);
@@ -489,14 +502,14 @@ public class PreviewPanel extends javax.swing.JPanel {
 }
 
 class Celda {
-    
+
     private int valor;
     private Color color;
 
     public Celda(Color bgColor) {
         this.color = bgColor;
     }
-    
+
     public Celda(int valor) {
         this.valor = valor;
         this.color = new Color(210, 210, 210);
@@ -524,4 +537,3 @@ class Celda {
         this.color = color;
     }
 }
-
