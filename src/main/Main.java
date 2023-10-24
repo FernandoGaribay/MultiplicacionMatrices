@@ -15,7 +15,7 @@ public class Main extends javax.swing.JFrame {
 
     private int[][] matrizA = null;
     private int[][] matrizB = null;
-    private ArrayList<Integer> tiemposEjecucion;
+    private ArrayList<String[]> tiemposEjecucion;
     private PopupPanel objPopup;
     private MatrizSecuencial objSecuencial;
     private MatrizPorFilas objConcurrente;
@@ -23,7 +23,7 @@ public class Main extends javax.swing.JFrame {
 
     public Main() {
         initComponents();
-        tiemposEjecucion = new ArrayList<Integer>();
+        tiemposEjecucion = new ArrayList<String[]>();
         objPopup = new PopupPanel();
         objSecuencial = new MatrizSecuencial();
         objConcurrente = new MatrizPorFilas();
@@ -309,25 +309,34 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderNumHilosMouseReleased
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
-        // Event Dispatch Thread (EDT)
+        if (matrizA[0].length != matrizB.length) {
+            JOptionPane.showMessageDialog(this, "Las matrices no pueden multiplicadas.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        btnComenzar.setEnabled(false);
 
+        // Event Dispatch Thread (EDT)
         // Se especifica que trabajara con una matriz y con un metodo void para actualizar la interfaz        
         SwingWorker<Integer, Void> worker = new SwingWorker<Integer, Void>() {
             int tiempoEjecucion = 0;
+            String algoritmo = "";
             int[][] matrizResultante = null;
 
             @Override
             protected Integer doInBackground() {
                 if (radioSecuencial.isSelected()) {
                     matrizResultante = objSecuencial.multiplicar(matrizA, matrizB);
+                    algoritmo = "Metodo Secuencial";
                     tiempoEjecucion = objSecuencial.getTiempoEjecucion();
                 } else if (radioFilas.isSelected()) {
                     objConcurrente.setNumHilos(sliderNumHilos.getValue());
                     matrizResultante = objConcurrente.multiplicar(matrizA, matrizB);
+                    algoritmo = "Metodo Por Filas";
                     tiempoEjecucion = objConcurrente.getTiempoEjecucion();
                 } else if (radioBloques.isSelected()) {
                     objPorBloques.setNumBloques(sliderNumHilos.getValue());
                     matrizResultante = objPorBloques.multiplicar(matrizA, matrizB);
+                    algoritmo = "Metodo Por Bloques";
                     tiempoEjecucion = objPorBloques.getTiempoEjecucion();
                 }
                 return 0;
@@ -337,8 +346,11 @@ public class Main extends javax.swing.JFrame {
             protected void done() {
                 try {
                     get(); // Obtiene la señar de que el proceso de doInBackground finalizo
+                    String[] nuevoTiempo = {algoritmo, convertirTiempo(tiempoEjecucion), String.valueOf(tiempoEjecucion)};
+                    btnComenzar.setEnabled(true);
                     pnlPreviewMatriz.setMatriz(matrizResultante);
-                    JOptionPane.showMessageDialog(null, "Tiempo de ejecucion: " + tiempoEjecucion);
+                    tiemposEjecucion.add(nuevoTiempo);
+                    JOptionPane.showMessageDialog(null, "Tiempo de ejecucion: " + convertirTiempo(tiempoEjecucion));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -351,6 +363,7 @@ public class Main extends javax.swing.JFrame {
     private void btnDelMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizBActionPerformed
 //        JOptionPane.showMessageDialog(this, "Matriz B Eliminada", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         matrizB = null;
+        tiemposEjecucion.removeAll(tiemposEjecucion);
         panelMatrizB.setVacio(true);
         panelMatrizB.repaint();
     }//GEN-LAST:event_btnDelMatrizBActionPerformed
@@ -358,6 +371,7 @@ public class Main extends javax.swing.JFrame {
     private void btnDelMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizAActionPerformed
 //        JOptionPane.showMessageDialog(this, "Matriz A Eliminada", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         matrizA = null;
+        tiemposEjecucion.removeAll(tiemposEjecucion);
         panelMatrizA.setVacio(true);
         panelMatrizA.repaint();
     }//GEN-LAST:event_btnDelMatrizAActionPerformed
@@ -375,7 +389,22 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_radioBloquesActionPerformed
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-
+        if (!tiemposEjecucion.isEmpty()) {
+            StringBuilder mensaje = new StringBuilder();
+            for (String[] tiempo : tiemposEjecucion) {
+                mensaje.append(tiempo[0]); // Agrega el nombre del algoritmo
+                mensaje.append(" -> ");
+                mensaje.append(tiempo[1]); // Agrega el tiempo
+                mensaje.append(" (");
+                mensaje.append(tiempo[2]); // Agrega tiempo de ejecucion en milis.
+                mensaje.append(" milisegundos");
+                mensaje.append(")   ");
+                mensaje.append("\n");
+            }
+            JOptionPane.showMessageDialog(this, mensaje.toString(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay registros.", "Informacion", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     private void pnlMatrizAMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMatrizAMousePressed
@@ -400,6 +429,18 @@ public class Main extends javax.swing.JFrame {
 
     public void deshabilitarMonitor() {
         this.sliderNumHilos.setEnabled(false);
+    }
+
+    public String convertirTiempo(long tiempoEnMilisegundos) {
+        long segundosTotales = tiempoEnMilisegundos / 1000;
+        long minutos = segundosTotales / 60;
+        long segundos = segundosTotales % 60;
+        long decimasSegundos = (tiempoEnMilisegundos % 1000) / 100;
+
+        // Formatea la cadena en el formato minutos:segundos:decimas con 2 dijitos
+        String tiempoFormateado = String.format("%02d:%02d:%02d", minutos, segundos, decimasSegundos);
+
+        return tiempoFormateado;
     }
 
     public int[][] generarMatriz(int filas, int columnas) {
