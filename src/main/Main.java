@@ -5,29 +5,44 @@ import algoritmos.MatrizPorBloques;
 import algoritmos.MatrizSecuencial;
 import algoritmos.MatrizPorFilas;
 import componentes.PopupPanel;
+import componentes.HiloUI;
+import interfaz.ProgresoListener;
 import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-public class Main extends javax.swing.JFrame {
+public class Main extends javax.swing.JFrame implements ProgresoListener {
 
     private int[][] matrizA = null;
     private int[][] matrizB = null;
-    private ArrayList<String[]> tiemposEjecucion;
     private PopupPanel objPopup;
+    private ArrayList<String[]> tiemposEjecucion;
+    private ArrayList<HiloUI> hilosUI;
     private MatrizSecuencial objSecuencial;
     private MatrizPorFilas objConcurrente;
     private MatrizPorBloques objPorBloques;
 
     public Main() {
         initComponents();
-        tiemposEjecucion = new ArrayList<String[]>();
         objPopup = new PopupPanel();
+        tiemposEjecucion = new ArrayList<String[]>();
+        hilosUI = new ArrayList<>();
         objSecuencial = new MatrizSecuencial();
-        objConcurrente = new MatrizPorFilas();
+        objConcurrente = new MatrizPorFilas(this);
         objPorBloques = new MatrizPorBloques();
+
+        HiloUI objHiloUI = new HiloUI("" + 1);
+        pnlContenedorHilos.add(objHiloUI);
+        hilosUI.add(objHiloUI);
+    }
+
+    @Override
+    public void progresoActualizado(int hilo, double porcentaje) {
+        hilosUI.get(hilo).actualizarPorcentaje(porcentaje);
+        pnlContenedorHilos.repaint();
+        pnlContenedorHilos.revalidate();
     }
 
     @SuppressWarnings("unchecked")
@@ -45,6 +60,7 @@ public class Main extends javax.swing.JFrame {
         pnlMonitor = new javax.swing.JPanel();
         lblNumHilos = new javax.swing.JLabel();
         sliderNumHilos = new javax.swing.JSlider();
+        jScrollPane1 = new javax.swing.JScrollPane();
         pnlContenedorHilos = new javax.swing.JPanel();
         pnlConfiguracion = new javax.swing.JPanel();
         btnDelMatrizB = new javax.swing.JButton();
@@ -139,8 +155,14 @@ public class Main extends javax.swing.JFrame {
         });
         pnlMonitor.add(sliderNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 290, -1));
 
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
         pnlContenedorHilos.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMonitor.add(pnlContenedorHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 290, 100));
+        pnlContenedorHilos.setLayout(new javax.swing.BoxLayout(pnlContenedorHilos, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane1.setViewportView(pnlContenedorHilos);
+
+        pnlMonitor.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 290, 100));
 
         pnlLateral.add(pnlMonitor, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 150, 330, 230));
 
@@ -306,6 +328,15 @@ public class Main extends javax.swing.JFrame {
 
     private void sliderNumHilosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderNumHilosMouseReleased
         System.out.println("Numero de hilos establecido a: " + sliderNumHilos.getValue());
+        hilosUI.removeAll(hilosUI);
+        pnlContenedorHilos.removeAll();
+        for (int i = 0; i < sliderNumHilos.getValue(); i++) {
+            HiloUI objHiloUI = new HiloUI("" + (i + 1));
+            pnlContenedorHilos.add(objHiloUI);
+            hilosUI.add(objHiloUI);
+        }
+        pnlContenedorHilos.repaint();
+        pnlContenedorHilos.revalidate();
     }//GEN-LAST:event_sliderNumHilosMouseReleased
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
@@ -501,6 +532,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnGenMatrizB;
     private javax.swing.ButtonGroup btnGroupAlgoritmos;
     private javax.swing.JButton btnHistorial;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNumHilos;
     private componentes.panelMatriz panelMatrizA;
     private componentes.panelMatriz panelMatrizB;

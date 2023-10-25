@@ -84,11 +84,11 @@ public class MatrizPorBloques {
     }
 
     public static void main(String[] args) {
-        MatrizPorFilas matrizConcurrente = new MatrizPorFilas();
-        int[][] matrizA = matrizConcurrente.generarMatriz(1000, 1000);
-        int[][] matrizB = matrizConcurrente.generarMatriz(1000, 1000);
+        MatrizPorBloques matrizBloques = new MatrizPorBloques();
+        int[][] matrizA = matrizBloques.generarMatriz(1000, 1000);
+        int[][] matrizB = matrizBloques.generarMatriz(1000, 1000);
 
-        int[][] matrizR = matrizConcurrente.multiplicar(matrizA, matrizB);
+        int[][] matrizR = matrizBloques.multiplicar(matrizA, matrizB);
 
         for (int i = 0; i < matrizR.length; i++) {
             for (int j = 0; j < matrizR[0].length; j++) {

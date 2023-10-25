@@ -1,18 +1,22 @@
 package algoritmos;
 
+import interfaz.ProgresoListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MatrizPorFilas {
-
+    
+    final ProgresoListener progresoListener;
     private int tiempoEjecucion;
     private int numHilos;
-
-    public MatrizPorFilas() {
+    
+    public MatrizPorFilas(ProgresoListener progresoListener) {
+        this.progresoListener = progresoListener;
         this.tiempoEjecucion = 0;
         this.numHilos = 8;
     }
@@ -22,29 +26,35 @@ public class MatrizPorFilas {
         if (matrizA == null || matrizB == null) {
             return null;
         }
-
+        
         ExecutorService pilaHilos = Executors.newFixedThreadPool(numHilos);
         List<Future> resultados = new ArrayList<>();
         int filas = matrizA.length;
         int columnasA = matrizA[0].length;
         int columnasB = matrizB[0].length;
         int[][] resultante = new int[filas][columnasB];
-
         int seccion = filas / numHilos;
-
+        
         long tiempoInicio = System.currentTimeMillis();  // CONTADOR INICIA ------------------------------------------
         try {
             for (int hilo = 0; hilo < numHilos; hilo++) {
+                final int hiloFinal = hilo; // Copia final de la variable hilo
                 final int filaInicio = hilo * seccion;
                 final int filaFin = (hilo == numHilos - 1) ? filas : (hilo + 1) * seccion;
 
+//                AtomicInteger progresoHilo = new AtomicInteger(0); // Operaciones atomicas (no pueden ser interrumpidas)
                 resultados.add(pilaHilos.submit(() -> {
+                    int progresoHilo = 0;
                     for (int i = filaInicio; i < filaFin; i++) {
                         for (int j = 0; j < columnasB; j++) {
                             for (int k = 0; k < columnasA; k++) {
                                 resultante[i][j] += matrizA[i][k] * matrizB[k][j];
                             }
                         }
+                        progresoHilo++;
+                        double porcentaje = (progresoHilo * 100.0) / (filaFin - filaInicio);
+                        progresoListener.progresoActualizado(hiloFinal, porcentaje); // Actualizar Interfaz
+//                        System.out.println("Progreso Hilo " + hiloFinal + ": " + porcentaje + "%");
                     }
                     return null;
                 }));
@@ -57,11 +67,11 @@ public class MatrizPorFilas {
         } finally {
             pilaHilos.shutdown();
         }
-
+        
         long tiempoFinal = System.currentTimeMillis();  // CONTADOR FINALIZA ------------------------------------------
         tiempoEjecucion = (int) (tiempoFinal - tiempoInicio);
         System.out.println("Tiempo de calculo: " + tiempoEjecucion + " milisegundos");
-
+        
         return resultante;
     }
 
@@ -116,7 +126,7 @@ public class MatrizPorFilas {
     public int[][] generarMatriz(int filas, int columnas) {
         int[][] matrizTemp = new int[filas][columnas];
         Random random = new Random();
-
+        
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 matrizTemp[i][j] = random.nextInt(10);
@@ -124,36 +134,37 @@ public class MatrizPorFilas {
         }
         return matrizTemp;
     }
-
+    
     public static void main(String[] args) {
-        MatrizPorFilas matrizConcurrente = new MatrizPorFilas();
-        int[][] matrizA = matrizConcurrente.generarMatriz(5000, 5000);
-        int[][] matrizB = matrizConcurrente.generarMatriz(5000, 5000);
+//        MatrizPorFilas matrizConcurrente = new MatrizPorFilas();
+//        int[][] matrizA = matrizConcurrente.generarMatriz(2000, 2000);
+//        int[][] matrizB = matrizConcurrente.generarMatriz(2000, 2000);
+//
+//        int[][] matrizR = matrizConcurrente.multiplicar(matrizA, matrizB);
 
-        int[][] matrizR = matrizConcurrente.multiplicar(matrizA, matrizB);
-
-        for (int i = 0; i < matrizR.length; i++) {
-            for (int j = 0; j < matrizR[0].length; j++) {
-                System.out.print(matrizR[i][j] + " ");
-            }
-            System.out.println("");
-        }
+//        // Imprimir Matriz
+//        for (int i = 0; i < matrizR.length; i++) {
+//            for (int j = 0; j < matrizR[0].length; j++) {
+//                System.out.print(matrizR[i][j] + " ");
+//            }
+//            System.out.println("");
+//        }
     }
-
+    
     public int getNumHilos() {
         return numHilos;
     }
-
+    
     public void setNumHilos(int numHilos) {
         this.numHilos = numHilos;
     }
-
+    
     public int getTiempoEjecucion() {
         return tiempoEjecucion;
     }
-
+    
     public void setTiempoEjecucion(int tiempoEjecucion) {
         this.tiempoEjecucion = tiempoEjecucion;
     }
-
+    
 }
