@@ -29,7 +29,7 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
         objPopup = new PopupPanel();
         tiemposEjecucion = new ArrayList<String[]>();
         hilosUI = new ArrayList<>();
-        objSecuencial = new MatrizSecuencial();
+        objSecuencial = new MatrizSecuencial(this);
         objConcurrente = new MatrizPorFilas(this);
         objPorBloques = new MatrizPorBloques();
 
