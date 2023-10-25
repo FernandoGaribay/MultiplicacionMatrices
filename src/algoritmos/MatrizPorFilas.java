@@ -141,7 +141,7 @@ public class MatrizPorFilas {
 //        int[][] matrizB = matrizConcurrente.generarMatriz(2000, 2000);
 //
 //        int[][] matrizR = matrizConcurrente.multiplicar(matrizA, matrizB);
-//
+
 //        // Imprimir Matriz
 //        for (int i = 0; i < matrizR.length; i++) {
 //            for (int j = 0; j < matrizR[0].length; j++) {
