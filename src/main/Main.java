@@ -4,7 +4,7 @@ import componentes.panelMatriz;
 import algoritmos.MatrizPorBloques;
 import algoritmos.MatrizSecuencial;
 import algoritmos.MatrizPorFilas;
-import componentes.PopupPanel;
+import componentes.PopupGenMatriz;
 import componentes.HiloUI;
 import interfaz.ProgresoListener;
 import java.awt.HeadlessException;
@@ -17,7 +17,7 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
 
     private int[][] matrizA = null;
     private int[][] matrizB = null;
-    private PopupPanel objPopup;
+    private PopupGenMatriz objPopup;
     private ArrayList<String[]> tiemposEjecucion;
     private ArrayList<HiloUI> hilosUI;
     private MatrizSecuencial objSecuencial;
@@ -26,7 +26,7 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
 
     public Main() {
         initComponents();
-        objPopup = new PopupPanel();
+        objPopup = new PopupGenMatriz();
         tiemposEjecucion = new ArrayList<String[]>();
         hilosUI = new ArrayList<>();
         objSecuencial = new MatrizSecuencial(this);
@@ -218,23 +218,25 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
         pnlConfiguracion.add(btnGenMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 80, 20));
 
         pnlMatrizB.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMatrizB.addMouseListener(new java.awt.event.MouseAdapter() {
+        pnlMatrizB.setLayout(new java.awt.BorderLayout());
+
+        panelMatrizB.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                pnlMatrizBMousePressed(evt);
+                panelMatrizBMousePressed(evt);
             }
         });
-        pnlMatrizB.setLayout(new java.awt.BorderLayout());
         pnlMatrizB.add(panelMatrizB, java.awt.BorderLayout.CENTER);
 
         pnlConfiguracion.add(pnlMatrizB, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 55, 125, 125));
 
         pnlMatrizA.setBackground(new java.awt.Color(255, 255, 255));
-        pnlMatrizA.addMouseListener(new java.awt.event.MouseAdapter() {
+        pnlMatrizA.setLayout(new java.awt.BorderLayout());
+
+        panelMatrizA.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                pnlMatrizAMousePressed(evt);
+                panelMatrizAMousePressed(evt);
             }
         });
-        pnlMatrizA.setLayout(new java.awt.BorderLayout());
         pnlMatrizA.add(panelMatrizA, java.awt.BorderLayout.CENTER);
 
         pnlConfiguracion.add(pnlMatrizA, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 55, 125, 125));
@@ -271,55 +273,33 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizBActionPerformed
-        int filas;
-        int columnas;
-
         if (matrizB != null) {
             JOptionPane.showMessageDialog(this, "Ya existe una Matriz B en memoria.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        try {
-            filas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de filas: "));
-            columnas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de columnas: "));
-        } catch (HeadlessException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Favor de insertar un numero valido.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (filas == 0 || columnas == 0) {
-            JOptionPane.showMessageDialog(this, "Las matrices no pueden ser con filas/columnas 0.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        objPopup.showPopup();
+        matrizB = objPopup.getMatriz();
 
-        matrizB = generarMatriz(filas, columnas);
-        panelMatrizB.setVacio(false);
-        panelMatrizB.setText(filas + "x" + columnas);
-        panelMatrizB.repaint();
+        if (matrizB != null) {
+            panelMatrizB.setVacio(false);
+            panelMatrizB.setText(matrizB.length + "x" + matrizB[0].length);
+            panelMatrizB.repaint();
+        }
     }//GEN-LAST:event_btnGenMatrizBActionPerformed
 
     private void btnGenMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizAActionPerformed
-        int filas;
-        int columnas;
-
         if (matrizA != null) {
             JOptionPane.showMessageDialog(this, "Ya existe una Matriz A en memoria.", "Informacion", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        try {
-            filas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de filas: "));
-            columnas = Integer.parseInt(JOptionPane.showInputDialog("Dijite el numero de columnas: "));
-        } catch (HeadlessException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Favor de insertar un numero valido.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (filas == 0 || columnas == 0) {
-            JOptionPane.showMessageDialog(this, "Las matrices no pueden ser con filas/columnas 0.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        objPopup.showPopup();
+        matrizA = objPopup.getMatriz();
 
-        matrizA = generarMatriz(filas, columnas);
-        panelMatrizA.setVacio(false);
-        panelMatrizA.setText(filas + "x" + columnas);
-        panelMatrizA.repaint();
+        if (matrizA != null) {
+            panelMatrizA.setVacio(false);
+            panelMatrizA.setText(matrizA.length + "x" + matrizA[0].length);
+            panelMatrizA.repaint();
+        }
     }//GEN-LAST:event_btnGenMatrizAActionPerformed
 
     private void sliderNumHilosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderNumHilosStateChanged
@@ -347,7 +327,7 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
         btnComenzar.setEnabled(false);
 
         // Event Dispatch Thread (EDT)
-        // Se especifica que trabajara con una matriz y con un metodo void para actualizar la interfaz        
+        // Se especifica que retorna un Integer y con un metodo void para actualizar la interfaz        
         SwingWorker<Integer, Void> worker = new SwingWorker<Integer, Void>() {
             int tiempoEjecucion = 0;
             String algoritmo = "";
@@ -438,21 +418,21 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
         }
     }//GEN-LAST:event_btnHistorialActionPerformed
 
-    private void pnlMatrizAMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMatrizAMousePressed
+    private void panelMatrizAMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMatrizAMousePressed
         if (matrizA != null) {
             pnlPreviewMatriz.setMatriz(matrizA);
         } else {
             pnlPreviewMatriz.setMatrizVacia();
         }
-    }//GEN-LAST:event_pnlMatrizAMousePressed
+    }//GEN-LAST:event_panelMatrizAMousePressed
 
-    private void pnlMatrizBMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMatrizBMousePressed
+    private void panelMatrizBMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMatrizBMousePressed
         if (matrizB != null) {
             pnlPreviewMatriz.setMatriz(matrizB);
         } else {
             pnlPreviewMatriz.setMatrizVacia();
         }
-    }//GEN-LAST:event_pnlMatrizBMousePressed
+    }//GEN-LAST:event_panelMatrizBMousePressed
 
     public void habilitarMonitor() {
         this.sliderNumHilos.setEnabled(true);

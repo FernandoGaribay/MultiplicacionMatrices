@@ -1,27 +1,33 @@
 package componentes;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 import javax.swing.JPanel;
 
 public class panelMatriz extends JPanel {
 
     private boolean vacio;
+    private boolean handCursor;
     private int numCeldas;
     private int separacionCelda;
     private String text;
 
     public panelMatriz() {
         this.vacio = true;
+        this.handCursor = true;
         this.numCeldas = 10;
         this.separacionCelda = 2;
         this.text = "100x100";
 
+        initEventos();
         repaint();
     }
 
@@ -32,6 +38,22 @@ public class panelMatriz extends JPanel {
         this.text = text;
 
         repaint();
+    }
+
+    private void initEventos() {
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (handCursor) {
+                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getDefaultCursor());
+            }
+        });
     }
 
     @Override
@@ -103,4 +125,14 @@ public class panelMatriz extends JPanel {
     public void setVacio(boolean vacio) {
         this.vacio = vacio;
     }
+
+    public boolean isHandCursor() {
+        return handCursor;
+    }
+
+    public void setHandCursor(boolean handCursor) {
+        this.handCursor = handCursor;
+    }
+    
+    
 }
