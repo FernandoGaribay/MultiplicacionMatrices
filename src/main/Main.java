@@ -320,6 +320,10 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
     }//GEN-LAST:event_sliderNumHilosMouseReleased
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
+        if (matrizA == null || matrizB == null) {
+            JOptionPane.showMessageDialog(this, "Una de las matrices esta vacia.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (matrizA[0].length != matrizB.length) {
             JOptionPane.showMessageDialog(this, "Las matrices no pueden multiplicadas.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
@@ -389,14 +393,36 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
 
     private void radioSecuencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSecuencialActionPerformed
         deshabilitarMonitor();
+        HiloUI objHiloUI = new HiloUI("" + 1);
+        pnlContenedorHilos.removeAll();
+        hilosUI.removeAll(hilosUI);
+        pnlContenedorHilos.add(objHiloUI);
+        hilosUI.add(objHiloUI);
+        pnlContenedorHilos.repaint();
+        pnlContenedorHilos.revalidate();
     }//GEN-LAST:event_radioSecuencialActionPerformed
 
     private void radioFilasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioFilasActionPerformed
         habilitarMonitor();
+        pnlContenedorHilos.removeAll();
+        hilosUI.removeAll(hilosUI);
+
+        for (int i = 0; i < sliderNumHilos.getValue(); i++) {
+            HiloUI objHiloUI = new HiloUI("" + (i + 1));
+            pnlContenedorHilos.add(objHiloUI);
+            hilosUI.add(objHiloUI);
+        }
+
+        pnlContenedorHilos.repaint();
+        pnlContenedorHilos.revalidate();
     }//GEN-LAST:event_radioFilasActionPerformed
 
     private void radioBloquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBloquesActionPerformed
         habilitarMonitor();
+        pnlContenedorHilos.removeAll();
+        hilosUI.removeAll(hilosUI);
+        pnlContenedorHilos.repaint();
+        pnlContenedorHilos.revalidate();
     }//GEN-LAST:event_radioBloquesActionPerformed
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed

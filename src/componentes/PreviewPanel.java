@@ -367,7 +367,7 @@ public class PreviewPanel extends javax.swing.JPanel {
 
         public void initPopup() {
             popup = new JDialog();
-            popup.setTitle("Popup");
+            popup.setTitle("Configuracion");
             popup.setModal(true);
             popup.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
@@ -404,6 +404,7 @@ public class PreviewPanel extends javax.swing.JPanel {
             setPreferredSize(new Dimension(popupWidth, popupHeight));
             pnlControles.setPreferredSize(new Dimension(popupWidth, pnlControlesHeight));
             pnlMensaje.setPreferredSize(new Dimension(popupWidth, pnlMensajeHeight));
+            lblVelocidad.setText("Velocidad de desplazamiento: x" + sliderVelocidad.getValue() / 100 + ".0");
 
             centrarPopup();
             popup.add(this);
