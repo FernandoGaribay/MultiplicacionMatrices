@@ -1,19 +1,37 @@
 package main;
 
 import componentes.PopupGenMatriz;
+import interfaz.ServerInterface;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.concurrent.ThreadLocalRandom;
+import rmi.MatrixMultiplierServer;
 
 public class ServerUI extends javax.swing.JFrame {
 
     private int[][] matrizA = null;
     private int[][] matrizB = null;
     private PopupGenMatriz objPopup;
+    
+    private ServerInterface chatServer;
 
     private int filas = 0, columnas = 0;
 
     public ServerUI() {
         initComponents();
         objPopup = new PopupGenMatriz();
+        try {
+            String ipAddress = "192.168.1.87";
+            System.setProperty("java.rmi.server.hostname", ipAddress);
+            Registry registry = LocateRegistry.createRegistry(1234);
+
+            chatServer = new MatrixMultiplierServer();
+            registry.rebind("ChatServer", chatServer);
+            System.out.println("ChatServer ready at " + ipAddress + "\n");
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @SuppressWarnings("unchecked")

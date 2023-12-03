@@ -1,9 +1,34 @@
 package main;
 
+import interfaz.ServerInterface;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import rmi.MatrixMultiplierClient;
+
 public class ClienteUI extends javax.swing.JFrame {
+
+    private String usuario;
+    private String servidorIP;
+    
+    private ServerInterface chatServer;
+    private MatrixMultiplierClient client;
 
     public ClienteUI() {
         initComponents();
+        this.usuario = "";
+        this.servidorIP = "";
+        
+        
+        try {
+            String name = "fer";
+            String serverIP = "192.168.1.87";
+            Registry registry = LocateRegistry.getRegistry(serverIP, 1234);
+
+            chatServer = (ServerInterface) registry.lookup("ChatServer");
+            client = new MatrixMultiplierClient(name, chatServer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -160,7 +185,12 @@ public class ClienteUI extends javax.swing.JFrame {
     }//GEN-LAST:event_panelMatrizAMousePressed
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
+        if (!textUsuario.getText().isEmpty() && !textIPServidor.getText().isEmpty()) {
+            this.usuario = textUsuario.getText();
+            this.servidorIP = textIPServidor.getText();
 
+            System.out.println("conectar a servidor");
+        }
     }//GEN-LAST:event_btnComenzarActionPerformed
 
     private void sliderNumHilosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderNumHilosStateChanged
@@ -176,7 +206,7 @@ public class ClienteUI extends javax.swing.JFrame {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
