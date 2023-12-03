@@ -1,6 +1,7 @@
 package rmi;
 
-
+import componentes.PreviewPanel;
+import componentes.panelMatriz;
 import interfaz.ServerInterface;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -10,10 +11,15 @@ import java.util.Scanner;
 
 public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject implements interfaz.UserInterface {
 
+    private PreviewPanel previewPanel;
+    private panelMatriz panelA;
+    private panelMatriz panelB;
+
     private long seedA;
     private long seedB;
     private int[][] matrizA;
     private int[][] matrizB;
+    private int[][] result;
     private int inicio, fin;
 
     private String name;
@@ -42,7 +48,6 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         }
 
 //        imprimirMatrizEnRango(result, inicio, fin);
-
         return result;
     }
 
@@ -57,23 +62,79 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         }
     }
 
+    public static int[][] getMatrizEnRango(int[][] matriz, int inicioFila, int finFila) {
+        int filas = finFila - inicioFila + 1;
+        int columnas = matriz[0].length;
+
+        int[][] matrizEnRango = new int[filas][columnas];
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                matrizEnRango[i][j] = matriz[inicioFila + i][j];
+            }
+        }
+
+        return matrizEnRango;
+    }
+
     @Override
     public String getName() {
         return name;
     }
 
     @Override
-    public void recibirSeed(long seedA, long seedB) throws RemoteException {
+    public void recibirSeedA(long seedA) throws RemoteException {
         this.seedA = seedA;
+        System.out.println("SeedA: " + seedA);
+    }
+
+    @Override
+    public void recibirSeedB(long seedB) throws RemoteException {
         this.seedB = seedB;
+        System.out.println("SeedB: " + seedB);
     }
 
     @Override
     public void recibirMatrices(int inicio, int fin, int filas, int columnas) throws RemoteException {
         matrizA = generarMatriz(filas, columnas, seedA);
         matrizB = generarMatriz(filas, columnas, seedB);
+        
+        imprimirMatriz(matrizA);
+        System.out.println("\n\n");
+        imprimirMatriz(matrizB);
+        
+        
         this.inicio = inicio;
         this.fin = fin;
+
+        // Actualizar paneles
+        panelA.setVacio(false);
+        panelA.setText("[" + inicio + "," + fin + "]");
+        panelA.repaint();
+
+        panelB.setVacio(false);
+        panelB.setText("[" + inicio + "," + fin + "]");
+        panelB.repaint();
+        
+        result = multiplicarMatricesEnRango();
+        chatServer.recibirMatrizParcial(result, inicio, fin);
+    }
+
+    @Override
+    public void getMatrizA () {
+        previewPanel.setMatriz(getMatrizEnRango(matrizA, inicio, fin)); 
+    }
+
+    @Override
+    public void getMatrizB () {
+        previewPanel.setMatriz(getMatrizEnRango(matrizB, inicio, fin)); 
+    }
+
+    @Override
+    public void setPanelsListeners(PreviewPanel previewPanel, panelMatriz panelA, panelMatriz panelB) throws RemoteException {
+        this.previewPanel = previewPanel;
+        this.panelA = panelA;
+        this.panelB = panelB;
     }
 
     public static void main(String[] args) {

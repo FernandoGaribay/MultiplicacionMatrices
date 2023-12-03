@@ -2,9 +2,13 @@ package main;
 
 import componentes.PopupGenMatriz;
 import interfaz.ServerInterface;
+import interfaz.UserInterface;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rmi.MatrixMultiplierServer;
 
 public class ServerUI extends javax.swing.JFrame {
@@ -12,7 +16,7 @@ public class ServerUI extends javax.swing.JFrame {
     private int[][] matrizA = null;
     private int[][] matrizB = null;
     private PopupGenMatriz objPopup;
-    
+
     private ServerInterface chatServer;
 
     private int filas = 0, columnas = 0;
@@ -228,21 +232,33 @@ public class ServerUI extends javax.swing.JFrame {
 
     private void btnDelMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizBActionPerformed
         if (filas != 0 && columnas != 0) {
-            long seedB = ThreadLocalRandom.current().nextLong(10000L, 100000L);
+            try {
+                long seedB = ThreadLocalRandom.current().nextLong(10000L, 100000L);
 
-            panelMatrizB.setVacio(false);
-            panelMatrizB.setText(filas + "x" + columnas);
-            panelMatrizB.repaint();
+                panelMatrizB.setVacio(false);
+                panelMatrizB.setText(filas + "x" + columnas);
+                panelMatrizB.repaint();
+
+                chatServer.broadcastSeedB(seedB);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnDelMatrizBActionPerformed
 
     private void btnDelMatrizAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizAActionPerformed
         if (filas != 0 && columnas != 0) {
-            long seedA = ThreadLocalRandom.current().nextLong(10000L, 100000L);
+            try {
+                long seedA = ThreadLocalRandom.current().nextLong(10000L, 100000L);
 
-            panelMatrizA.setVacio(false);
-            panelMatrizA.setText(filas + "x" + columnas);
-            panelMatrizA.repaint();
+                panelMatrizA.setVacio(false);
+                panelMatrizA.setText(filas + "x" + columnas);
+                panelMatrizA.repaint();
+
+                chatServer.broadcastSeedA(seedA);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnDelMatrizAActionPerformed
 
@@ -258,11 +274,31 @@ public class ServerUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenMatrizDimensionesActionPerformed
 
     private void panelMatrizBMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMatrizBMousePressed
-
+        try {
+            pnlPreviewMatriz.setMatriz(chatServer.getMatrizB(filas, columnas));
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_panelMatrizBMousePressed
 
     private void panelMatrizAMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMatrizAMousePressed
+        try {
+            int[][] matriz = chatServer.getMatrizA(filas, columnas);
+            pnlPreviewMatriz.setMatriz(matriz);
 
+            int filas = matriz.length;
+            int columnas = matriz[0].length;
+
+            for (int i = 0; i < filas; i++) {
+                for (int j = 0; j < columnas; j++) {
+                    System.out.print(matriz[i][j] + " ");
+                }
+                System.out.println();
+            }
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_panelMatrizAMousePressed
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
@@ -270,7 +306,39 @@ public class ServerUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
+        try {
+            // Repartir matriz
+            try {
+                int totalClients = chatServer.getConnectedUsers().size();
+                int rowsPerClient = filas / totalClients;
+                int remainingRows = filas % totalClients;
 
+                int assignedRows = 0;
+                for (int i = 0; i < totalClients; i++) {
+                    int currentRows = rowsPerClient;
+
+                    if (remainingRows > 0) {
+                        currentRows++;
+                        remainingRows--;
+                    }
+
+                    if ((assignedRows + currentRows) > filas) {
+                        currentRows = filas - assignedRows;
+                    }
+
+                    UserInterface usuario = chatServer.getConnectedUsers().get(i);
+                    chatServer.mandarMatrices(assignedRows, (assignedRows + currentRows - 1), filas, columnas, usuario);
+
+                    assignedRows += currentRows;
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            pnlPreviewMatriz.setMatriz(chatServer.getResul());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnComenzarActionPerformed
 
     public static void main(String args[]) {

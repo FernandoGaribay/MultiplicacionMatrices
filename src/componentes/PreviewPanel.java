@@ -187,8 +187,11 @@ public class PreviewPanel extends javax.swing.JPanel {
 
     public void setMatriz(int[][] matriz) {
         this.matriz = new Celda[matriz.length][matriz[0].length];
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[0].length; j++) {
+        int filas = matriz.length;
+        int columnas = matriz[0].length;
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
                 this.matriz[i][j] = new Celda(matriz[i][j]);
                 this.matriz[i][j].setRandomColorCelda(); // Colores al azar a la matriz
             }
@@ -212,8 +215,8 @@ public class PreviewPanel extends javax.swing.JPanel {
 
                 for (int i = 0; i < filas; i++) {
                     for (int j = 0; j < columnas; j++) {
-                        int x = (int) (i * (tamañoCelda + separacionCeldas) * zoom) - offsetX;
-                        int y = (int) (j * (tamañoCelda + separacionCeldas) * zoom) - offsetY;
+                        int x = (int) (j * (tamañoCelda + separacionCeldas) * zoom) - offsetX;
+                        int y = (int) (i * (tamañoCelda + separacionCeldas) * zoom) - offsetY;
 
                         if (areaVisible.intersects(x, y, (tamañoCelda * zoom), (tamañoCelda * zoom))) {
                             g.setColor(matriz[i][j].getColor());

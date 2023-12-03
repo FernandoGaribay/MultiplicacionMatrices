@@ -9,7 +9,7 @@ public class ClienteUI extends javax.swing.JFrame {
 
     private String usuario;
     private String servidorIP;
-    
+
     private ServerInterface chatServer;
     private MatrixMultiplierClient client;
 
@@ -17,8 +17,7 @@ public class ClienteUI extends javax.swing.JFrame {
         initComponents();
         this.usuario = "";
         this.servidorIP = "";
-        
-        
+
         try {
             String name = "fer";
             String serverIP = "192.168.1.87";
@@ -26,6 +25,7 @@ public class ClienteUI extends javax.swing.JFrame {
 
             chatServer = (ServerInterface) registry.lookup("ChatServer");
             client = new MatrixMultiplierClient(name, chatServer);
+            client.setPanelsListeners(pnlPreviewMatriz, panelMatrizA, panelMatrizB);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,6 +58,7 @@ public class ClienteUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -174,14 +175,15 @@ public class ClienteUI extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 710));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void panelMatrizBMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMatrizBMousePressed
-
+        client.getMatrizB();
     }//GEN-LAST:event_panelMatrizBMousePressed
 
     private void panelMatrizAMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMatrizAMousePressed
-
+        client.getMatrizA();
     }//GEN-LAST:event_panelMatrizAMousePressed
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed

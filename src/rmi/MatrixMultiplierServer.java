@@ -1,6 +1,5 @@
 package rmi;
 
-
 import interfaz.ServerInterface;
 import interfaz.UserInterface;
 import java.io.Serializable;
@@ -21,6 +20,12 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
     private List<int[][]> matricesParciales;
     private int respuestasRecibidas;
 
+    private int filas, columnas;
+    private int[][] resul;
+
+    private long seedA;
+    private long seedB;
+
     public MatrixMultiplierServer() throws RemoteException {
         super();
         connectedUsers = new ArrayList<>();
@@ -29,14 +34,39 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
     }
 
     @Override
-    public void broadcastSeed(long seedA, long seedB) throws RemoteException {
+    public void broadcastSeedA(long seedA) throws RemoteException {
         for (UserInterface connectedUser : connectedUsers) {
-            connectedUser.recibirSeed(seedA, seedB);
+            connectedUser.recibirSeedA(seedA);
+            this.seedA = seedA;
+            System.out.println("SeedA: " + seedA);
         }
     }
 
     @Override
+    public void broadcastSeedB(long seedB) throws RemoteException {
+        for (UserInterface connectedUser : connectedUsers) {
+            connectedUser.recibirSeedB(seedB);
+            this.seedB = seedB;
+            System.out.println("SeedB: " + seedB);
+        }
+    }
+
+    @Override
+    public int[][] getMatrizA(int filas, int columnas) throws RemoteException {
+        System.out.println("Generada con la Seed: " + seedA);
+        return generarMatriz(filas, columnas, seedA);
+    }
+
+    @Override
+    public int[][] getMatrizB(int filas, int columnas) throws RemoteException {
+        System.out.println("Generada con la Seed: " + seedB);
+        return generarMatriz(filas, columnas, seedB);
+    }
+
+    @Override
     public void mandarMatrices(int inicio, int fin, int filas, int columnas, UserInterface user) throws RemoteException {
+        this.filas = filas;
+        this.columnas = columnas;
         user.recibirMatrices(inicio, fin, filas, columnas);
     }
 
@@ -59,7 +89,7 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
         // Verificar si se han recibido todas las respuestas
         if (respuestasRecibidas == connectedUsers.size()) {
             // Todas las respuestas han sido recibidas, ahora puedes imprimir la matriz resultante
-            imprimirMatriz(obtenerMatrizResultante());
+            resul = obtenerMatrizResultante();
         }
     }
 
@@ -68,11 +98,11 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
         // Verificar si se han recibido todas las respuestas
         if (respuestasRecibidas == connectedUsers.size()) {
             // Multiplicar y sumar las matrices parciales para obtener la matriz resultante
-            int[][] matrizResultante = new int[10][10];
+            int[][] matrizResultante = new int[filas][columnas];
 
             for (int[][] matrizParcial : matricesParciales) {
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 0; j < 10; j++) {
+                for (int i = 0; i < filas; i++) {
+                    for (int j = 0; j < columnas; j++) {
                         matrizResultante[i][j] += matrizParcial[i][j];
                     }
                 }
@@ -85,65 +115,69 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
         }
     }
 
-    public static void main(String[] args) {
-
-        try {
-            String ipAddress = "192.168.1.87";
-            System.setProperty("java.rmi.server.hostname", ipAddress);
-            Registry registry = LocateRegistry.createRegistry(1234);
-
-            ServerInterface chatServer = new MatrixMultiplierServer();
-            registry.rebind("ChatServer", chatServer);
-            System.out.println("ChatServer ready at " + ipAddress);
-
-            Scanner scanner = new Scanner(System.in);
-
-            System.out.print("Ingrese el número de filas para la matriz: ");
-            int filas = scanner.nextInt();
-            System.out.print("Ingrese el número de columnas para la matriz: ");
-            int columnas = scanner.nextInt();
-
-            long seedA = 12345;
-            int[][] matrixA = generarMatriz(filas, columnas, seedA);
-            long seedB = 54321;
-            int[][] matrixB = generarMatriz(filas, columnas, seedB);
-
-            // Broadcast mandar semilla
-            chatServer.broadcastSeed(seedA, seedB);
-
-            // Repartir matriz
-            int totalClients = chatServer.getConnectedUsers().size();
-            int rowsPerClient = filas / totalClients;
-            int remainingRows = filas % totalClients;
-
-            int assignedRows = 0;
-            for (int i = 0; i < totalClients; i++) {
-                int currentRows = rowsPerClient;
-
-                if (remainingRows > 0) {
-                    currentRows++;
-                    remainingRows--;
-                }
-
-                if ((assignedRows + currentRows) > filas) {
-                    currentRows = filas - assignedRows;
-                }
-
-                UserInterface usuario = chatServer.getConnectedUsers().get(i);
-                chatServer.mandarMatrices(assignedRows, (assignedRows + currentRows - 1), filas, columnas, usuario);
-
-                assignedRows += currentRows;
-            }
-
-            // RECIBIR MATRICES          
-            imprimirMatriz(multiplicarMatrices(matrixA, matrixB));
-            System.out.println("\n\n");
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    @Override
+    public int[][] getResul() {
+        return resul;
     }
 
+//    public static void main(String[] args) {
+//
+//        try {
+//            String ipAddress = "192.168.1.87";
+//            System.setProperty("java.rmi.server.hostname", ipAddress);
+//            Registry registry = LocateRegistry.createRegistry(1234);
+//
+//            ServerInterface chatServer = new MatrixMultiplierServer();
+//            registry.rebind("ChatServer", chatServer);
+//            System.out.println("ChatServer ready at " + ipAddress);
+//
+//            Scanner scanner = new Scanner(System.in);
+//
+//            System.out.print("Ingrese el número de filas para la matriz: ");
+//            int filas = scanner.nextInt();
+//            System.out.print("Ingrese el número de columnas para la matriz: ");
+//            int columnas = scanner.nextInt();
+//
+//            long seedA = 12345;
+//            int[][] matrixA = generarMatriz(filas, columnas, seedA);
+//            long seedB = 54321;
+//            int[][] matrixB = generarMatriz(filas, columnas, seedB);
+//
+//            // Broadcast mandar semilla
+//            chatServer.broadcastSeed(seedA, seedB);
+//
+//            // Repartir matriz
+//            int totalClients = chatServer.getConnectedUsers().size();
+//            int rowsPerClient = filas / totalClients;
+//            int remainingRows = filas % totalClients;
+//
+//            int assignedRows = 0;
+//            for (int i = 0; i < totalClients; i++) {
+//                int currentRows = rowsPerClient;
+//
+//                if (remainingRows > 0) {
+//                    currentRows++;
+//                    remainingRows--;
+//                }
+//
+//                if ((assignedRows + currentRows) > filas) {
+//                    currentRows = filas - assignedRows;
+//                }
+//
+//                UserInterface usuario = chatServer.getConnectedUsers().get(i);
+//                chatServer.mandarMatrices(assignedRows, (assignedRows + currentRows - 1), filas, columnas, usuario);
+//
+//                assignedRows += currentRows;
+//            }
+//
+//            // RECIBIR MATRICES          
+//            imprimirMatriz(multiplicarMatrices(matrixA, matrixB));
+//            System.out.println("\n\n");
+//
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//    }
     public static int[][] multiplicarMatrices(int[][] matrizA, int[][] matrizB) {
         int rowsA = matrizA.length;
         int colsA = matrizA[0].length;
