@@ -13,6 +13,7 @@ public class PopupGenMatriz extends javax.swing.JPanel {
 
     private JDialog popup;
     private int[][] matriz;
+    private int filas, columnas;
 
     public PopupGenMatriz() {
         initComponents();
@@ -158,27 +159,34 @@ public class PopupGenMatriz extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void pnl500MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl500MousePressed
-        this.matriz = generarMatriz(500, 500);
+//        this.matriz = generarMatriz(500, 500);
+        this.filas = 500;
+        this.columnas = 500;
         this.popup.dispose();
     }//GEN-LAST:event_pnl500MousePressed
 
     private void pn1000MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pn1000MousePressed
-        this.matriz = generarMatriz(1000, 1000);
+//        this.matriz = generarMatriz(1000, 1000);
+        this.filas = 1000;
+        this.columnas = 1000;
         this.popup.dispose();
     }//GEN-LAST:event_pn1000MousePressed
 
     private void pnl1500MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl1500MousePressed
-        this.matriz = generarMatriz(1500, 1500);
+//        this.matriz = generarMatriz(1500, 1500);
+        this.filas = 1500;
+        this.columnas = 1500;
         this.popup.dispose();
     }//GEN-LAST:event_pnl1500MousePressed
 
     private void pnl2000MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnl2000MousePressed
-        this.matriz = generarMatriz(2000, 2000);
+//        this.matriz = generarMatriz(2000, 2000);
+        this.filas = 2000;
+        this.columnas = 2000;
         this.popup.dispose();
     }//GEN-LAST:event_pnl2000MousePressed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        int filas = 0, columnas = 0;
 
         if (textFilas.getText().isEmpty() || textColumnas.getText().isEmpty()) {
             mostrarError();
@@ -215,9 +223,26 @@ public class PopupGenMatriz extends javax.swing.JPanel {
     }
 
     public int[][] getMatriz() {
+        this.matriz = generarMatriz(filas, columnas);
         return matriz;
     }
 
+    public int getFilas() {
+        return filas;
+    }
+
+    public void setFilas(int filas) {
+        this.filas = filas;
+    }
+
+    public int getColumnas() {
+        return columnas;
+    }
+
+    public void setColumnas(int columnas) {
+        this.columnas = columnas;
+    }
+    
     public static void main(String[] args) {
         PopupGenMatriz popupPanel = new PopupGenMatriz();
         popupPanel.showPopup();

@@ -78,36 +78,35 @@ public class panelMatriz extends JPanel {
             }
         }
 
-        if (!vacio) {
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-            String texto = getText();
-            Font fontNegro = new Font("TimesRoman", Font.BOLD, 22);
-            Font fontBlanco = new Font("TimesRoman", Font.BOLD, 22);
+        String texto = getText();
+        Font fontNegro = new Font("TimesRoman", Font.BOLD, 22);
+        Font fontBlanco = new Font("TimesRoman", Font.BOLD, 22);
 
-            FontMetrics fmNegro = g2d.getFontMetrics(fontNegro);
-            FontMetrics fmBlanco = g2d.getFontMetrics(fontBlanco);
+        FontMetrics fmNegro = g2d.getFontMetrics(fontNegro);
+        FontMetrics fmBlanco = g2d.getFontMetrics(fontBlanco);
 
-            int xTextoN = (getWidth() - fmNegro.stringWidth(texto)) / 2;
-            int yTextoN = (getHeight() + fmNegro.getAscent() - fmNegro.getDescent()) / 2;
+        int xTextoN = (getWidth() - fmNegro.stringWidth(texto)) / 2;
+        int yTextoN = (getHeight() + fmNegro.getAscent() - fmNegro.getDescent()) / 2;
 
-            int xTextoB = (getWidth() - fmBlanco.stringWidth(texto)) / 2;
-            int yTextoB = (getHeight() + fmBlanco.getAscent() - fmBlanco.getDescent()) / 2;
+        int xTextoB = (getWidth() - fmBlanco.stringWidth(texto)) / 2;
+        int yTextoB = (getHeight() + fmBlanco.getAscent() - fmBlanco.getDescent()) / 2;
 
-            g2d.setColor(Color.WHITE);
-            g2d.setFont(fontBlanco);
-            int bordeAncho = 2;
-            for (int i = -bordeAncho; i <= bordeAncho; i++) {
-                for (int j = -bordeAncho; j <= bordeAncho; j++) {
-                    g2d.drawString(texto, xTextoB + i, yTextoB + j);
-                }
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(fontBlanco);
+        int bordeAncho = 2;
+        for (int i = -bordeAncho; i <= bordeAncho; i++) {
+            for (int j = -bordeAncho; j <= bordeAncho; j++) {
+                g2d.drawString(texto, xTextoB + i, yTextoB + j);
             }
-
-            g2d.setColor(Color.BLACK);
-            g2d.setFont(fontNegro);
-            g2d.drawString(texto, xTextoN, yTextoN);
         }
+
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(fontNegro);
+        g2d.drawString(texto, xTextoN, yTextoN);
+
     }
 
     public String getText() {
@@ -133,6 +132,5 @@ public class panelMatriz extends JPanel {
     public void setHandCursor(boolean handCursor) {
         this.handCursor = handCursor;
     }
-    
-    
+
 }

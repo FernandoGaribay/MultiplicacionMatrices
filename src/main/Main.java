@@ -220,6 +220,7 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
         pnlMatrizB.setBackground(new java.awt.Color(255, 255, 255));
         pnlMatrizB.setLayout(new java.awt.BorderLayout());
 
+        panelMatrizB.setText("");
         panelMatrizB.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 panelMatrizBMousePressed(evt);
@@ -232,6 +233,7 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
         pnlMatrizA.setBackground(new java.awt.Color(255, 255, 255));
         pnlMatrizA.setLayout(new java.awt.BorderLayout());
 
+        panelMatrizA.setText("");
         panelMatrizA.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 panelMatrizAMousePressed(evt);
@@ -380,6 +382,7 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
         matrizB = null;
         tiemposEjecucion.removeAll(tiemposEjecucion);
         panelMatrizB.setVacio(true);
+        panelMatrizB.setText("");
         panelMatrizB.repaint();
     }//GEN-LAST:event_btnDelMatrizBActionPerformed
 
@@ -388,6 +391,7 @@ public class Main extends javax.swing.JFrame implements ProgresoListener {
         matrizA = null;
         tiemposEjecucion.removeAll(tiemposEjecucion);
         panelMatrizA.setVacio(true);
+        panelMatrizA.setText("");
         panelMatrizA.repaint();
     }//GEN-LAST:event_btnDelMatrizAActionPerformed
 
