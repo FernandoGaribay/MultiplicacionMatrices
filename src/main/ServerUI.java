@@ -12,6 +12,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import rmi.MatrixMultiplierServer;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ServerUI extends javax.swing.JFrame {
 
@@ -284,36 +290,58 @@ public class ServerUI extends javax.swing.JFrame {
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
         try {
-            // Repartir matriz
-            try {
-                int totalClients = chatServer.getConnectedUsers().size();
-                int rowsPerClient = filas / totalClients;
-                int remainingRows = filas % totalClients;
+            int totalClients = chatServer.getConnectedUsers().size();
+            int rowsPerClient = filas / totalClients;
+            int remainingRows = filas % totalClients;
 
-                int assignedRows = 0;
-                for (int i = 0; i < totalClients; i++) {
-                    int currentRows = rowsPerClient;
+            int assignedRows = 0;
 
-                    if (remainingRows > 0) {
-                        currentRows++;
-                        remainingRows--;
-                    }
+            // Lista para almacenar los resultados futuros
+            List<Future<Void>> futures = new ArrayList<>();
 
-                    if ((assignedRows + currentRows) > filas) {
-                        currentRows = filas - assignedRows;
-                    }
+            // Crear un ExecutorService para administrar los hilos
+            ExecutorService executor = Executors.newFixedThreadPool(totalClients);
 
-                    UserInterface usuario = chatServer.getConnectedUsers().get(i);
-                    chatServer.mandarMatrices(assignedRows, (assignedRows + currentRows - 1), filas, columnas, usuario);
+            for (int i = 0; i < totalClients; i++) {
+                final int currentRows = rowsPerClient;  // Hacer final la variable local
 
-                    assignedRows += currentRows;
+                int updatedRows = currentRows;  // Utilizar una nueva variable no final para almacenar el valor actualizado
+
+                if (remainingRows > 0) {
+                    updatedRows++;
+                    remainingRows--;
                 }
-            } catch (Exception e) {
-                System.out.println(e);
+
+                if ((assignedRows + updatedRows) > filas) {
+                    updatedRows = filas - assignedRows;
+                }
+
+                final UserInterface usuario = chatServer.getConnectedUsers().get(i);  // Hacer final la variable local
+                final int finalAssignedRows = assignedRows;  // Crear una variable final adicional
+                final int finalUpdatedRows = updatedRows;
+
+                // Utilizar Callable para ejecutar la lógica y devolver un resultado
+                Callable<Void> task = () -> {
+                    chatServer.mandarMatrices(finalAssignedRows, (finalAssignedRows + finalUpdatedRows - 1), filas, columnas, usuario);
+                    return null;
+                };
+
+                // Enviar la tarea al ExecutorService y almacenar el Future en la lista
+                futures.add(executor.submit(task));
+
+                assignedRows += updatedRows;
             }
 
+            // Esperar a que todas las tareas se completen
+            for (Future<Void> future : futures) {
+                future.get();
+            }
+
+            // Apagar el ExecutorService
+            executor.shutdown();
+
             pnlPreviewMatriz.setMatriz(chatServer.getResul());
-        } catch (RemoteException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnComenzarActionPerformed
