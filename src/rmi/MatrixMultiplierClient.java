@@ -156,8 +156,10 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
 
     @Override
     public void setNumHilos(int numHilos) {
+        System.out.println("NUM HILOS NUEVO: " + numHilos);
         this.numHilos = numHilos;
         pnlContenedorHilos.removeAll();
+        hilosUI.removeAll(hilosUI);
         for (int i = 0; i < numHilos; i++) {
             HiloUI objHiloUI = new HiloUI("" + (i + 1));
             pnlContenedorHilos.add(objHiloUI);
@@ -181,6 +183,11 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
     @Override
     public void getMatrizB() {
         previewPanel.setMatriz(getMatrizEnRango(matrizB, inicio, fin));
+    }
+    
+    @Override
+    public void disconect() throws RemoteException{
+        chatServer.disconnectUser(this);
     }
 
     public int[][] getMatrizEnRango(int[][] matriz, int inicioFila, int finFila) {

@@ -8,6 +8,8 @@ import javax.swing.JList;
 public interface ServerInterface extends Remote {
 
     void connectUser(UserInterface usuario) throws RemoteException;
+    
+    void disconnectUser(UserInterface usuario) throws RemoteException;
 
     List<UserInterface> getConnectedUsers() throws RemoteException;
 
@@ -28,5 +30,7 @@ public interface ServerInterface extends Remote {
     int[][] getResul() throws RemoteException;
     
     void setListUsers(JList listUsers) throws RemoteException;
+    
+    void resetResul() throws RemoteException;
 
 }

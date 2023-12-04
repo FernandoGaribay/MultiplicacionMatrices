@@ -3,9 +3,12 @@ package main;
 import componentes.HiloUI;
 import interfaz.ProgresoListener;
 import interfaz.ServerInterface;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import rmi.MatrixMultiplierClient;
 
 public class ClienteUI extends javax.swing.JFrame {
@@ -212,9 +215,14 @@ public class ClienteUI extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderNumHilosMouseReleased
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Main vtnMain = new Main();
-        vtnMain.setVisible(true);
-        this.dispose();
+        try {
+            Main vtnMain = new Main();
+            vtnMain.setVisible(true);
+            client.disconect();
+            this.dispose();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowClosing
 
     public static void main(String args[]) {

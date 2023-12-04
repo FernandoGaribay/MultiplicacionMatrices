@@ -91,6 +91,24 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
         System.out.println("-> Usuario: " + usuario.getName() + " conectado.");
     }
 
+    public void disconnectUser(UserInterface usuario) throws RemoteException {
+        this.connectedUsers.remove(usuario);
+        SwingUtilities.invokeLater(() -> {
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+
+            for (UserInterface client : connectedUsers) {
+                try {
+                    listModel.addElement(client.getName());
+                } catch (RemoteException ex) {
+                    ex.getMessage();
+                }
+            }
+
+            listUsers.setModel(listModel);
+        });
+        System.out.println("-> Usuario: " + usuario.getName() + " conectado.");
+    }
+
     @Override
     public List<UserInterface> getConnectedUsers() throws RemoteException {
         return connectedUsers;
@@ -103,36 +121,39 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
 
         // Verificar si se han recibido todas las respuestas
         if (respuestasRecibidas == connectedUsers.size()) {
-            // Todas las respuestas han sido recibidas, ahora puedes imprimir la matriz resultante
+            // Todas las respuestas han sido recibidas, se obtiene la resultante
             resul = obtenerMatrizResultante();
+            respuestasRecibidas = 0;
         }
+
     }
 
     @Override
     public int[][] obtenerMatrizResultante() throws RemoteException {
-        // Verificar si se han recibido todas las respuestas
-        if (respuestasRecibidas == connectedUsers.size()) {
-            // Multiplicar y sumar las matrices parciales para obtener la matriz resultante
-            int[][] matrizResultante = new int[filas][columnas];
+        System.out.println("Filas: " + filas);
+        System.out.println("Columnas: " + columnas);
 
-            for (int[][] matrizParcial : matricesParciales) {
-                for (int i = 0; i < filas; i++) {
-                    for (int j = 0; j < columnas; j++) {
-                        matrizResultante[i][j] += matrizParcial[i][j];
-                    }
+        int[][] matrizResultante = new int[filas][columnas];
+
+        for (int[][] matrizParcial : matricesParciales) {
+            for (int i = 0; i < matrizParcial.length; i++) {
+                for (int j = 0; j < matrizParcial[0].length; j++) {
+                    matrizResultante[i][j] += matrizParcial[i][j];
                 }
             }
-
-            return matrizResultante;
-        } else {
-            // Devolver una matriz vacía o manejar la situación de otra manera
-            return new int[10][10];
         }
+
+        return matrizResultante;
     }
 
     @Override
     public int[][] getResul() {
         return resul;
+    }
+
+    @Override
+    public void resetResul() {
+        this.resul = null;
     }
 
 //    public static void main(String[] args) {

@@ -22,8 +22,6 @@ import java.util.concurrent.Future;
 public class ServerUI extends javax.swing.JFrame {
 
     private Registry registry;
-    private int[][] matrizA = null;
-    private int[][] matrizB = null;
     private PopupGenMatriz objPopup;
 
     private ServerInterface chatServer;
@@ -55,9 +53,6 @@ public class ServerUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         pnlPreviewMatriz = new componentes.PreviewPanel();
         pnlLateral = new javax.swing.JPanel();
-        pnlAlgoritmos = new javax.swing.JPanel();
-        radioSecuencial = new javax.swing.JRadioButton();
-        radioFilas = new javax.swing.JRadioButton();
         pnlConfiguracion = new javax.swing.JPanel();
         btnDelMatrizB = new javax.swing.JButton();
         btnDelMatrizA = new javax.swing.JButton();
@@ -85,34 +80,6 @@ public class ServerUI extends javax.swing.JFrame {
         jPanel1.add(pnlPreviewMatriz, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 800, 690));
 
         pnlLateral.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        pnlAlgoritmos.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Algoritmos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-        pnlAlgoritmos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        radioSecuencial.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        radioSecuencial.setSelected(true);
-        radioSecuencial.setText("Procesamiento Secuencial");
-        radioSecuencial.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        radioSecuencial.setFocusPainted(false);
-        radioSecuencial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioSecuencialActionPerformed(evt);
-            }
-        });
-        pnlAlgoritmos.add(radioSecuencial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 300, -1));
-
-        radioFilas.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        radioFilas.setText("Procesamiento Concurrente");
-        radioFilas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        radioFilas.setFocusPainted(false);
-        radioFilas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioFilasActionPerformed(evt);
-            }
-        });
-        pnlAlgoritmos.add(radioFilas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 300, -1));
-
-        pnlLateral.add(pnlAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 90));
 
         pnlConfiguracion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuracion", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlConfiguracion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -207,7 +174,7 @@ public class ServerUI extends javax.swing.JFrame {
         jList1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jScrollPane1.setViewportView(jList1);
 
-        pnlLateral.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 330, 240));
+        pnlLateral.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 350));
 
         jPanel1.add(pnlLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, 370, 690));
 
@@ -216,14 +183,6 @@ public class ServerUI extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void radioSecuencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSecuencialActionPerformed
-
-    }//GEN-LAST:event_radioSecuencialActionPerformed
-
-    private void radioFilasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioFilasActionPerformed
-
-    }//GEN-LAST:event_radioFilasActionPerformed
 
     private void btnDelMatrizBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelMatrizBActionPerformed
         if (filas != 0 && columnas != 0) {
@@ -258,14 +217,22 @@ public class ServerUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDelMatrizAActionPerformed
 
     private void btnGenMatrizDimensionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenMatrizDimensionesActionPerformed
-        objPopup.showPopup();
-        this.filas = objPopup.getFilas();
-        this.columnas = objPopup.getColumnas();
-
-        panelMatrizA.setText(filas + "x" + columnas);
-        panelMatrizA.repaint();
-        panelMatrizB.setText(filas + "x" + columnas);
-        panelMatrizB.repaint();
+        try {
+            objPopup.showPopup();
+            this.filas = objPopup.getFilas();
+            this.columnas = objPopup.getColumnas();
+            
+            chatServer.resetResul();
+            pnlPreviewMatriz.setMatrizVacia();
+            panelMatrizA.setVacio(true);
+            panelMatrizA.setText(filas + "x" + columnas);
+            panelMatrizA.repaint();
+            panelMatrizB.setVacio(true);
+            panelMatrizB.setText(filas + "x" + columnas);
+            panelMatrizB.repaint();
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGenMatrizDimensionesActionPerformed
 
     private void panelMatrizBMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMatrizBMousePressed
@@ -409,13 +376,10 @@ public class ServerUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private componentes.panelMatriz panelMatrizA;
     private componentes.panelMatriz panelMatrizB;
-    private javax.swing.JPanel pnlAlgoritmos;
     private javax.swing.JPanel pnlConfiguracion;
     private javax.swing.JPanel pnlLateral;
     private javax.swing.JPanel pnlMatrizA;
     private javax.swing.JPanel pnlMatrizB;
     private componentes.PreviewPanel pnlPreviewMatriz;
-    private javax.swing.JRadioButton radioFilas;
-    private javax.swing.JRadioButton radioSecuencial;
     // End of variables declaration//GEN-END:variables
 }

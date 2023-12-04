@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 
 public interface UserInterface extends Remote {
 
+    void disconect() throws RemoteException;
+    
     String getName() throws RemoteException;
 
     void recibirSeedA(long seedA) throws RemoteException;
