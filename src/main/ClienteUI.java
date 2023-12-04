@@ -135,9 +135,8 @@ public class ClienteUI extends javax.swing.JFrame {
         sliderNumHilos.setMinimum(1);
         sliderNumHilos.setPaintLabels(true);
         sliderNumHilos.setPaintTicks(true);
-        sliderNumHilos.setValue(1);
+        sliderNumHilos.setValue(4);
         sliderNumHilos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        sliderNumHilos.setEnabled(false);
         sliderNumHilos.setFocusable(false);
         sliderNumHilos.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -205,7 +204,7 @@ public class ClienteUI extends javax.swing.JFrame {
     }//GEN-LAST:event_sliderNumHilosStateChanged
 
     private void sliderNumHilosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sliderNumHilosMouseReleased
-
+        client.setNumHilos(sliderNumHilos.getValue());
     }//GEN-LAST:event_sliderNumHilosMouseReleased
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

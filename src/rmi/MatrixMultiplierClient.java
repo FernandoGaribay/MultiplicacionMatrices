@@ -6,30 +6,35 @@ import componentes.panelMatriz;
 import interfaz.ProgresoListener;
 import interfaz.ServerInterface;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
-public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject implements interfaz.UserInterface, ProgresoListener {
+public class MatrixMultiplierClient extends UnicastRemoteObject implements interfaz.UserInterface, ProgresoListener {
 
+    // Paneles Listenners
     private PreviewPanel previewPanel;
     private panelMatriz panelA;
     private panelMatriz panelB;
 
-    private long seedA;
-    private long seedB;
+    // Generacion de matrices
     private int[][] matrizA;
     private int[][] matrizB;
-    private int[][] result;
+    private int[][] resultante;
+    private long seedA;
+    private long seedB;
     private int inicio, fin;
-    SwingWorker<int[][], Void> worker;
 
+    // Algoritmos de multiplicacion
+    private SwingWorker<int[][], Void> threadConcurrente;
+    private ArrayList<String[]> tiemposEjecucion;
     private MatrizPorFilas objConcurrente;
+    private int numHilos;
 
+    // Credenciales
     private String name;
     private ServerInterface chatServer;
 
@@ -38,29 +43,30 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         this.name = name;
         this.chatServer = chatServer;
         this.chatServer.connectUser(this);
+        this.numHilos = 4;
         objConcurrente = new MatrizPorFilas(this);
+        tiemposEjecucion = new ArrayList<String[]>();
     }
 
-    private void multiplicarMatricesEnRango() {
-        int rowsA = matrizA.length;
-        int colsA = matrizA[0].length;
-        int colsB = matrizB[0].length;
-
-        int[][] result = new int[rowsA][colsB];
-
-        for (int i = inicio; i <= fin; i++) {
-            for (int j = 0; j < colsB; j++) {
-                for (int k = 0; k < colsA; k++) {
-                    result[i][j] += matrizA[i][k] * matrizB[k][j];
-                }
-            }
-        }
-        //        imprimirMatrizEnRango(result, inicio, fin);
-        setResult(result);
-    }
-
+//    private void multiplicarMatricesEnRango() {
+//        int rowsA = matrizA.length;
+//        int colsA = matrizA[0].length;
+//        int colsB = matrizB[0].length;
+//
+//        int[][] result = new int[rowsA][colsB];
+//
+//        for (int i = inicio; i <= fin; i++) {
+//            for (int j = 0; j < colsB; j++) {
+//                for (int k = 0; k < colsA; k++) {
+//                    result[i][j] += matrizA[i][k] * matrizB[k][j];
+//                }
+//            }
+//        }
+//        //        imprimirMatrizEnRango(resultante, inicio, fin);
+//        setResultante(result);
+//    }
     public void multiplicarPorFilas() {
-        worker = new SwingWorker<int[][], Void>() {
+        threadConcurrente = new SwingWorker<int[][], Void>() {
             int tiempoEjecucion = 0;
             String algoritmo = "";
             int rowsA = matrizA.length;
@@ -70,15 +76,19 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
 
             @Override
             protected int[][] doInBackground() {
-                objConcurrente.setNumHilos(12);
+                objConcurrente.setNumHilos(numHilos);
                 newResult = objConcurrente.multiplicarSubMatrizEnRango(matrizA, matrizB, inicio, fin);
-                algoritmo = "Metodo Por Filas";
+
+                algoritmo = "Concurrente";
                 tiempoEjecucion = objConcurrente.getTiempoEjecucion();
+                String[] nuevoTiempo = {algoritmo, convertirTiempo(tiempoEjecucion), String.valueOf(tiempoEjecucion)};
+                tiemposEjecucion.add(nuevoTiempo);
+
+                JOptionPane.showMessageDialog(null, "Tiempo de ejecucion: " + convertirTiempo(tiempoEjecucion));
                 return newResult;
             }
         };
-
-        worker.execute();
+        threadConcurrente.execute();
     }
 
     @Override
@@ -86,57 +96,6 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         //        hilosUI.get(hilo).actualizarPorcentaje(porcentaje);
         //        pnlContenedorHilos.repaint();
         //        pnlContenedorHilos.revalidate();
-    }
-
-    public String convertirTiempo(long tiempoEnMilisegundos) {
-        long segundosTotales = tiempoEnMilisegundos / 1000;
-        long minutos = segundosTotales / 60;
-        long segundos = segundosTotales % 60;
-        long decimasSegundos = (tiempoEnMilisegundos % 1000) / 100;
-
-        // Formatea la cadena en el formato minutos:segundos:decimas con 2 dijitos
-        String tiempoFormateado = String.format("%02d:%02d:%02d", minutos, segundos, decimasSegundos);
-
-        return tiempoFormateado;
-    }
-
-    public static void imprimirMatrizEnRango(int[][] matriz, int inicioFila, int finFila) {
-        int columnas = matriz[0].length;
-
-        for (int i = inicioFila; i <= finFila; i++) {
-            for (int j = 0; j < columnas; j++) {
-                System.out.print(matriz[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    public static int[][] getMatrizEnRango(int[][] matriz, int inicioFila, int finFila) {
-        int filas = finFila - inicioFila + 1;
-        int columnas = matriz[0].length;
-
-        int[][] matrizEnRango = new int[filas][columnas];
-
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
-                matrizEnRango[i][j] = matriz[inicioFila + i][j];
-            }
-        }
-
-        return matrizEnRango;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public int[][] getResult() {
-        return result;
-    }
-
-    public void setResult(int[][] result) {
-        this.result = result;
     }
 
     @Override
@@ -153,9 +112,9 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
 
     @Override
     public void recibirMatrices(int inicio, int fin, int filas, int columnas) throws RemoteException {
-        matrizA = generarMatriz(filas, columnas, seedA);
-        matrizB = generarMatriz(filas, columnas, seedB);
-
+        // Generar matrices y asignar inicio y fin
+        this.matrizA = generarMatriz(filas, columnas, seedA);
+        this.matrizB = generarMatriz(filas, columnas, seedB);
         this.inicio = inicio;
         this.fin = fin;
 
@@ -170,11 +129,29 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
 
         multiplicarPorFilas();
         try {
-            int[][] result = worker.get();
+            int[][] result = threadConcurrente.get();
             chatServer.recibirMatrizParcial(result, inicio, fin);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void setPanelsListeners(PreviewPanel previewPanel, panelMatriz panelA, panelMatriz panelB) throws RemoteException {
+        this.previewPanel = previewPanel;
+        this.panelA = panelA;
+        this.panelB = panelB;
+    }
+
+    @Override
+    public void setNumHilos(int numHilos) {
+        this.numHilos = numHilos;
+        System.out.println("Numero de hilos: " + this.numHilos);
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -187,14 +164,42 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         previewPanel.setMatriz(getMatrizEnRango(matrizB, inicio, fin));
     }
 
-    @Override
-    public void setPanelsListeners(PreviewPanel previewPanel, panelMatriz panelA, panelMatriz panelB) throws RemoteException {
-        this.previewPanel = previewPanel;
-        this.panelA = panelA;
-        this.panelB = panelB;
+    public int[][] getMatrizEnRango(int[][] matriz, int inicioFila, int finFila) {
+        int filas = finFila - inicioFila + 1;
+        int columnas = matriz[0].length;
+
+        int[][] matrizEnRango = new int[filas][columnas];
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                matrizEnRango[i][j] = matriz[inicioFila + i][j];
+            }
+        }
+
+        return matrizEnRango;
     }
 
-    public static int[][] generarMatriz(int rows, int columns, long seed) {
+    public int[][] getResultante() {
+        return resultante;
+    }
+
+    public void setResultante(int[][] resultante) {
+        this.resultante = resultante;
+    }
+
+    private String convertirTiempo(long tiempoEnMilisegundos) {
+        long segundosTotales = tiempoEnMilisegundos / 1000;
+        long minutos = segundosTotales / 60;
+        long segundos = segundosTotales % 60;
+        long decimasSegundos = (tiempoEnMilisegundos % 1000) / 100;
+
+        // Formatea la cadena en el formato minutos:segundos:decimas con 2 dijitos
+        String tiempoFormateado = String.format("%02d:%02d:%02d", minutos, segundos, decimasSegundos);
+
+        return tiempoFormateado;
+    }
+
+    private int[][] generarMatriz(int rows, int columns, long seed) {
         int[][] matrix = new int[rows][columns];
         Random random = new Random(seed);
 
@@ -207,7 +212,18 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         return matrix;
     }
 
-    public static void imprimirMatriz(int[][] matriz) {
+    private void imprimirMatrizEnRango(int[][] matriz, int inicioFila, int finFila) {
+        int columnas = matriz[0].length;
+
+        for (int i = inicioFila; i <= finFila; i++) {
+            for (int j = 0; j < columnas; j++) {
+                System.out.print(matriz[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    private static void imprimirMatriz(int[][] matriz) {
         int filas = matriz.length;
         int columnas = matriz[0].length;
 
