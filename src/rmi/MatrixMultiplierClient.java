@@ -1,15 +1,20 @@
 package rmi;
 
+import algoritmos.MatrizPorFilas;
 import componentes.PreviewPanel;
 import componentes.panelMatriz;
+import interfaz.ProgresoListener;
 import interfaz.ServerInterface;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 
-public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject implements interfaz.UserInterface {
+public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject implements interfaz.UserInterface, ProgresoListener {
 
     private PreviewPanel previewPanel;
     private panelMatriz panelA;
@@ -21,6 +26,9 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
     private int[][] matrizB;
     private int[][] result;
     private int inicio, fin;
+    SwingWorker<int[][], Void> worker;
+
+    private MatrizPorFilas objConcurrente;
 
     private String name;
     private ServerInterface chatServer;
@@ -30,9 +38,10 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         this.name = name;
         this.chatServer = chatServer;
         this.chatServer.connectUser(this);
+        objConcurrente = new MatrizPorFilas(this);
     }
 
-    private int[][] multiplicarMatricesEnRango() {
+    private void multiplicarMatricesEnRango() {
         int rowsA = matrizA.length;
         int colsA = matrizA[0].length;
         int colsB = matrizB[0].length;
@@ -46,9 +55,49 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
                 }
             }
         }
+        //        imprimirMatrizEnRango(result, inicio, fin);
+        setResult(result);
+    }
 
-//        imprimirMatrizEnRango(result, inicio, fin);
-        return result;
+    public void multiplicarPorFilas() {
+        worker = new SwingWorker<int[][], Void>() {
+            int tiempoEjecucion = 0;
+            String algoritmo = "";
+            int rowsA = matrizA.length;
+            int colsA = matrizA[0].length;
+            int colsB = matrizB[0].length;
+            int[][] newResult = new int[rowsA][colsB];
+
+            @Override
+            protected int[][] doInBackground() {
+                objConcurrente.setNumHilos(12);
+                newResult = objConcurrente.multiplicarSubMatrizEnRango(matrizA, matrizB, inicio, fin);
+                algoritmo = "Metodo Por Filas";
+                tiempoEjecucion = objConcurrente.getTiempoEjecucion();
+                return newResult;
+            }
+        };
+
+        worker.execute();
+    }
+
+    @Override
+    public void progresoActualizado(int hilo, double porcentaje) {
+        //        hilosUI.get(hilo).actualizarPorcentaje(porcentaje);
+        //        pnlContenedorHilos.repaint();
+        //        pnlContenedorHilos.revalidate();
+    }
+
+    public String convertirTiempo(long tiempoEnMilisegundos) {
+        long segundosTotales = tiempoEnMilisegundos / 1000;
+        long minutos = segundosTotales / 60;
+        long segundos = segundosTotales % 60;
+        long decimasSegundos = (tiempoEnMilisegundos % 1000) / 100;
+
+        // Formatea la cadena en el formato minutos:segundos:decimas con 2 dijitos
+        String tiempoFormateado = String.format("%02d:%02d:%02d", minutos, segundos, decimasSegundos);
+
+        return tiempoFormateado;
     }
 
     public static void imprimirMatrizEnRango(int[][] matriz, int inicioFila, int finFila) {
@@ -82,6 +131,14 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         return name;
     }
 
+    public int[][] getResult() {
+        return result;
+    }
+
+    public void setResult(int[][] result) {
+        this.result = result;
+    }
+
     @Override
     public void recibirSeedA(long seedA) throws RemoteException {
         this.seedA = seedA;
@@ -98,12 +155,7 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
     public void recibirMatrices(int inicio, int fin, int filas, int columnas) throws RemoteException {
         matrizA = generarMatriz(filas, columnas, seedA);
         matrizB = generarMatriz(filas, columnas, seedB);
-        
-        imprimirMatriz(matrizA);
-        System.out.println("\n\n");
-        imprimirMatriz(matrizB);
-        
-        
+
         this.inicio = inicio;
         this.fin = fin;
 
@@ -115,19 +167,24 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         panelB.setVacio(false);
         panelB.setText("[" + inicio + "," + fin + "]");
         panelB.repaint();
-        
-        result = multiplicarMatricesEnRango();
-        chatServer.recibirMatrizParcial(result, inicio, fin);
+
+        multiplicarPorFilas();
+        try {
+            int[][] result = worker.get();
+            chatServer.recibirMatrizParcial(result, inicio, fin);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void getMatrizA () {
-        previewPanel.setMatriz(getMatrizEnRango(matrizA, inicio, fin)); 
+    public void getMatrizA() {
+        previewPanel.setMatriz(getMatrizEnRango(matrizA, inicio, fin));
     }
 
     @Override
-    public void getMatrizB () {
-        previewPanel.setMatriz(getMatrizEnRango(matrizB, inicio, fin)); 
+    public void getMatrizB() {
+        previewPanel.setMatriz(getMatrizEnRango(matrizB, inicio, fin));
     }
 
     @Override
@@ -135,28 +192,6 @@ public class MatrixMultiplierClient extends java.rmi.server.UnicastRemoteObject 
         this.previewPanel = previewPanel;
         this.panelA = panelA;
         this.panelB = panelB;
-    }
-
-    public static void main(String[] args) {
-        try {
-            String name = "jos";
-            String serverIP = "192.168.1.87";
-            Registry registry = LocateRegistry.getRegistry(serverIP, 1234);
-
-            ServerInterface chatServer = (ServerInterface) registry.lookup("ChatServer");
-            MatrixMultiplierClient client = new MatrixMultiplierClient(name, chatServer);
-
-            Scanner scanner = new Scanner(System.in);
-            scanner.nextLine();
-
-            System.out.println("Matriz resultante en el rango [" + client.inicio + ", " + client.fin + "]:");
-            int[][] result = client.multiplicarMatricesEnRango();
-            chatServer.recibirMatrizParcial(result, client.inicio, client.fin);
-
-            imprimirMatriz(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static int[][] generarMatriz(int rows, int columns, long seed) {
