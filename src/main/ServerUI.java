@@ -18,11 +18,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import javax.swing.JOptionPane;
 
 public class ServerUI extends javax.swing.JFrame {
 
     private Registry registry;
     private PopupGenMatriz objPopup;
+    private ArrayList<String[]> tiemposEjecucion;
 
     private ServerInterface chatServer;
 
@@ -31,6 +33,7 @@ public class ServerUI extends javax.swing.JFrame {
     public ServerUI() {
         initComponents();
         objPopup = new PopupGenMatriz();
+        tiemposEjecucion = new ArrayList<String[]>();
         try {
             String ipAddress = "192.168.1.87";
             System.setProperty("java.rmi.server.hostname", ipAddress);
@@ -221,7 +224,7 @@ public class ServerUI extends javax.swing.JFrame {
             objPopup.showPopup();
             this.filas = objPopup.getFilas();
             this.columnas = objPopup.getColumnas();
-            
+
             chatServer.resetResul();
             pnlPreviewMatriz.setMatrizVacia();
             panelMatrizA.setVacio(true);
@@ -252,7 +255,22 @@ public class ServerUI extends javax.swing.JFrame {
     }//GEN-LAST:event_panelMatrizAMousePressed
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-
+        if (!tiemposEjecucion.isEmpty()) {
+            StringBuilder mensaje = new StringBuilder();
+            for (String[] tiempo : tiemposEjecucion) {
+                mensaje.append(tiempo[0]); // Agrega el nombre del algoritmo
+                mensaje.append(" -> ");
+                mensaje.append(tiempo[1]); // Agrega el tiempo
+                mensaje.append(" (");
+                mensaje.append(tiempo[2]); // Agrega tiempo de ejecucion en milis.
+                mensaje.append(" milisegundos");
+                mensaje.append(")   ");
+                mensaje.append("\n");
+            }
+            JOptionPane.showMessageDialog(this, mensaje.toString(), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay registros.", "Informacion", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnHistorialActionPerformed
 
     private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
@@ -268,7 +286,7 @@ public class ServerUI extends javax.swing.JFrame {
 
             // Crear un ExecutorService para administrar los hilos
             ExecutorService executor = Executors.newFixedThreadPool(totalClients);
-
+            long tiempoInicial = System.currentTimeMillis();
             for (int i = 0; i < totalClients; i++) {
                 final int currentRows = rowsPerClient;  // Hacer final la variable local
 
@@ -304,6 +322,11 @@ public class ServerUI extends javax.swing.JFrame {
                 future.get();
             }
 
+            long tiempoFinal = System.currentTimeMillis();
+            long tiempoTotal = tiempoFinal - tiempoInicial;
+            String[] nuevoTiempo = {"Clientes conectados: " + chatServer.getConnectedUsers().size(), convertirTiempo(tiempoTotal), String.valueOf(tiempoTotal)};
+            tiemposEjecucion.add(nuevoTiempo);
+
             // Apagar el ExecutorService
             executor.shutdown();
 
@@ -336,6 +359,18 @@ public class ServerUI extends javax.swing.JFrame {
         vtnMain.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_formWindowClosing
+
+    private String convertirTiempo(long tiempoEnMilisegundos) {
+        long segundosTotales = tiempoEnMilisegundos / 1000;
+        long minutos = segundosTotales / 60;
+        long segundos = segundosTotales % 60;
+        long decimasSegundos = (tiempoEnMilisegundos % 1000) / 100;
+
+        // Formatea la cadena en el formato minutos:segundos:decimas con 2 dijitos
+        String tiempoFormateado = String.format("%02d:%02d:%02d", minutos, segundos, decimasSegundos);
+
+        return tiempoFormateado;
+    }
 
     public static void main(String args[]) {
 

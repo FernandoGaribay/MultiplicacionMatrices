@@ -4,6 +4,7 @@ import componentes.PreviewPanel;
 import componentes.panelMatriz;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 
 public interface UserInterface extends Remote {
@@ -25,5 +26,7 @@ public interface UserInterface extends Remote {
     void recibirMatrices(int inicio, int fin, int filas, int columnas) throws RemoteException;
 
     void setNumHilos(int numHilos) throws RemoteException;
+    
+    ArrayList<String[]> getTiemposEjecucion() throws RemoteException;
     
 }

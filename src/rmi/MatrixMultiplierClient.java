@@ -184,7 +184,12 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
     public void getMatrizB() {
         previewPanel.setMatriz(getMatrizEnRango(matrizB, inicio, fin));
     }
-    
+
+    @Override
+    public ArrayList<String[]> getTiemposEjecucion() {
+        return tiemposEjecucion;
+    }
+        
     @Override
     public void disconect() throws RemoteException{
         chatServer.disconnectUser(this);
