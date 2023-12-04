@@ -3,6 +3,7 @@ package main;
 import componentes.PopupGenMatriz;
 import interfaz.ServerInterface;
 import interfaz.UserInterface;
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -10,9 +11,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rmi.MatrixMultiplierServer;
+import java.rmi.server.UnicastRemoteObject;
 
 public class ServerUI extends javax.swing.JFrame {
 
+    private Registry registry;
     private int[][] matrizA = null;
     private int[][] matrizB = null;
     private PopupGenMatriz objPopup;
@@ -27,7 +30,7 @@ public class ServerUI extends javax.swing.JFrame {
         try {
             String ipAddress = "192.168.1.87";
             System.setProperty("java.rmi.server.hostname", ipAddress);
-            Registry registry = LocateRegistry.createRegistry(1234);
+            registry = LocateRegistry.createRegistry(1234);
 
             chatServer = new MatrixMultiplierServer();
             registry.rebind("ChatServer", chatServer);
@@ -62,8 +65,13 @@ public class ServerUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -340,6 +348,30 @@ public class ServerUI extends javax.swing.JFrame {
             Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnComenzarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if (registry != null) {
+            try {
+                // Desvincula el objeto del registro antes de cerrar el registro
+                registry.unbind("ChatServer");
+            } catch (Exception e) {
+                // Maneja cualquier excepción que pueda ocurrir al desvincular
+                e.printStackTrace();
+            }
+
+            try {
+                // Cierra el registro
+                UnicastRemoteObject.unexportObject(registry, true);
+            } catch (Exception e) {
+                // Maneja cualquier excepción que pueda ocurrir al cerrar el registro
+                e.printStackTrace();
+            }
+        }
+
+        Main vtnMain = new Main();
+        vtnMain.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     public static void main(String args[]) {
 
