@@ -4,6 +4,7 @@ import componentes.PreviewPanel;
 import componentes.panelMatriz;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import javax.swing.JPanel;
 
 public interface UserInterface extends Remote {
 
@@ -17,7 +18,7 @@ public interface UserInterface extends Remote {
 
     void getMatrizB() throws RemoteException;
 
-    void setPanelsListeners(PreviewPanel previewPanel, panelMatriz panelA, panelMatriz panelB) throws RemoteException;
+    void setPanelsListeners(PreviewPanel previewPanel, panelMatriz panelA, panelMatriz panelB, JPanel pnlContenedorHilos) throws RemoteException;
 
     void recibirMatrices(int inicio, int fin, int filas, int columnas) throws RemoteException;
 

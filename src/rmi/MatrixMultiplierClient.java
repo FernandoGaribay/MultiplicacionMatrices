@@ -1,6 +1,7 @@
 package rmi;
 
 import algoritmos.MatrizPorFilas;
+import componentes.HiloUI;
 import componentes.PreviewPanel;
 import componentes.panelMatriz;
 import interfaz.ProgresoListener;
@@ -16,6 +17,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class MatrixMultiplierClient extends UnicastRemoteObject implements interfaz.UserInterface, ProgresoListener {
@@ -38,6 +40,8 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
     private ArrayList<String[]> tiemposEjecucion;
     private MatrizPorFilas objConcurrente;
     private int numHilos;
+    private ArrayList<HiloUI> hilosUI;
+    private JPanel pnlContenedorHilos;
 
     // Credenciales
     private JList listUsers;
@@ -50,27 +54,11 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
         this.chatServer = chatServer;
         this.chatServer.connectUser(this);
         this.numHilos = 4;
+        this.hilosUI = new ArrayList<>();
         objConcurrente = new MatrizPorFilas(this);
         tiemposEjecucion = new ArrayList<String[]>();
     }
 
-//    private void multiplicarMatricesEnRango() {
-//        int rowsA = matrizA.length;
-//        int colsA = matrizA[0].length;
-//        int colsB = matrizB[0].length;
-//
-//        int[][] result = new int[rowsA][colsB];
-//
-//        for (int i = inicio; i <= fin; i++) {
-//            for (int j = 0; j < colsB; j++) {
-//                for (int k = 0; k < colsA; k++) {
-//                    result[i][j] += matrizA[i][k] * matrizB[k][j];
-//                }
-//            }
-//        }
-//        //        imprimirMatrizEnRango(resultante, inicio, fin);
-//        setResultante(result);
-//    }
     public void multiplicarPorFilas() {
         threadConcurrente = new SwingWorker<int[][], Void>() {
             int tiempoEjecucion = 0;
@@ -99,9 +87,9 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
 
     @Override
     public void progresoActualizado(int hilo, double porcentaje) {
-        //        hilosUI.get(hilo).actualizarPorcentaje(porcentaje);
-        //        pnlContenedorHilos.repaint();
-        //        pnlContenedorHilos.revalidate();
+        hilosUI.get(hilo).actualizarPorcentaje(porcentaje);
+        pnlContenedorHilos.repaint();
+        pnlContenedorHilos.revalidate();
     }
 
     @Override
@@ -143,10 +131,11 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
     }
 
     @Override
-    public void setPanelsListeners(PreviewPanel previewPanel, panelMatriz panelA, panelMatriz panelB) throws RemoteException {
+    public void setPanelsListeners(PreviewPanel previewPanel, panelMatriz panelA, panelMatriz panelB, JPanel pnlContenedorHilos) throws RemoteException {
         this.previewPanel = previewPanel;
         this.panelA = panelA;
         this.panelB = panelB;
+        this.pnlContenedorHilos = pnlContenedorHilos;
     }
 
     public void updateClientList(List<UserInterface> clients) throws RemoteException {
@@ -168,6 +157,14 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
     @Override
     public void setNumHilos(int numHilos) {
         this.numHilos = numHilos;
+        pnlContenedorHilos.removeAll();
+        for (int i = 0; i < numHilos; i++) {
+            HiloUI objHiloUI = new HiloUI("" + (i + 1));
+            pnlContenedorHilos.add(objHiloUI);
+            hilosUI.add(objHiloUI);
+        }
+        pnlContenedorHilos.repaint();
+        pnlContenedorHilos.revalidate();
         System.out.println("Numero de hilos: " + this.numHilos);
     }
 
@@ -257,3 +254,21 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
         }
     }
 }
+
+//    private void multiplicarMatricesEnRango() {
+//        int rowsA = matrizA.length;
+//        int colsA = matrizA[0].length;
+//        int colsB = matrizB[0].length;
+//
+//        int[][] result = new int[rowsA][colsB];
+//
+//        for (int i = inicio; i <= fin; i++) {
+//            for (int j = 0; j < colsB; j++) {
+//                for (int k = 0; k < colsA; k++) {
+//                    result[i][j] += matrizA[i][k] * matrizB[k][j];
+//                }
+//            }
+//        }
+//        //        imprimirMatrizEnRango(resultante, inicio, fin);
+//        setResultante(result);
+//    }

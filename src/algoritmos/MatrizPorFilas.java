@@ -96,12 +96,17 @@ public class MatrizPorFilas {
                 final int filaFin = (hilo == numHilos - 1) ? fin + 1 : inicio + (hilo + 1) * seccion;
 
                 resultados.add(pilaHilos.submit(() -> {
+                    int progresoHilo = 0;
                     for (int i = filaInicio; i < filaFin; i++) {
                         for (int j = 0; j < columnasB; j++) {
                             for (int k = 0; k < columnasA; k++) {
                                 resultante[i][j] += matrizA[i][k] * matrizB[k][j];
                             }
                         }
+                        progresoHilo++;
+                        double porcentaje = (progresoHilo * 100.0) / (filaFin - filaInicio);
+                        progresoListener.progresoActualizado(hiloFinal, porcentaje); // Actualizar Interfaz
+//                        System.out.println("Progreso Hilo " + hiloFinal + ": " + porcentaje + "%");
                     }
                     return null;
                 }));

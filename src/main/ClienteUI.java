@@ -1,8 +1,11 @@
 package main;
 
+import componentes.HiloUI;
+import interfaz.ProgresoListener;
 import interfaz.ServerInterface;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import rmi.MatrixMultiplierClient;
 
 public class ClienteUI extends javax.swing.JFrame {
@@ -17,7 +20,7 @@ public class ClienteUI extends javax.swing.JFrame {
         initComponents();
         this.usuario = "";
         this.servidorIP = "";
-
+       
         try {
             String name = "fer";
             String serverIP = "192.168.1.87";
@@ -25,7 +28,8 @@ public class ClienteUI extends javax.swing.JFrame {
 
             chatServer = (ServerInterface) registry.lookup("ChatServer");
             client = new MatrixMultiplierClient(name, chatServer);
-            client.setPanelsListeners(pnlPreviewMatriz, panelMatrizA, panelMatrizB);
+            client.setPanelsListeners(pnlPreviewMatriz, panelMatrizA, panelMatrizB, pnlContenedorHilos);
+            client.setNumHilos(4);
         } catch (Exception e) {
             e.printStackTrace();
         }
