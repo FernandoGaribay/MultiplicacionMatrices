@@ -23,7 +23,7 @@ public class ClienteUI extends javax.swing.JFrame {
         initComponents();
         this.usuario = "";
         this.servidorIP = "";
-       
+
         try {
             String name = "fer";
             String serverIP = "192.168.1.87";
@@ -52,7 +52,7 @@ public class ClienteUI extends javax.swing.JFrame {
         panelMatrizA = new componentes.panelMatriz();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        btnComenzar = new javax.swing.JButton();
+        btnConectar = new javax.swing.JButton();
         pnlMonitor = new javax.swing.JPanel();
         lblNumHilos = new javax.swing.JLabel();
         sliderNumHilos = new javax.swing.JSlider();
@@ -63,6 +63,7 @@ public class ClienteUI extends javax.swing.JFrame {
         textUsuario = new javax.swing.JTextField();
         textIPServidor = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        btnDesonectar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -120,21 +121,21 @@ public class ClienteUI extends javax.swing.JFrame {
 
         pnlLateral.add(pnlMatrices, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 330, 200));
 
-        btnComenzar.setText("Comenzar");
-        btnComenzar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnComenzar.setFocusPainted(false);
-        btnComenzar.addActionListener(new java.awt.event.ActionListener() {
+        btnConectar.setText("Conectarse");
+        btnConectar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnConectar.setFocusPainted(false);
+        btnConectar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnComenzarActionPerformed(evt);
+                btnConectarActionPerformed(evt);
             }
         });
-        pnlLateral.add(btnComenzar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 630, 350, 50));
+        pnlLateral.add(btnConectar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 630, 160, 40));
 
         pnlMonitor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Monitor", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlMonitor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblNumHilos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblNumHilos.setText("Numero de hilos: 3");
+        lblNumHilos.setText("Numero de hilos: 4");
         pnlMonitor.add(lblNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 25, 290, 20));
 
         sliderNumHilos.setMajorTickSpacing(2);
@@ -181,6 +182,16 @@ public class ClienteUI extends javax.swing.JFrame {
 
         pnlLateral.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 20, 320, 140));
 
+        btnDesonectar.setText("Desconectar");
+        btnDesonectar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDesonectar.setFocusPainted(false);
+        btnDesonectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesonectarActionPerformed(evt);
+            }
+        });
+        pnlLateral.add(btnDesonectar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 630, 160, 40));
+
         jPanel1.add(pnlLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, 370, 690));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1200, 710));
@@ -197,14 +208,26 @@ public class ClienteUI extends javax.swing.JFrame {
         client.getMatrizA();
     }//GEN-LAST:event_panelMatrizAMousePressed
 
-    private void btnComenzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarActionPerformed
+    private void btnConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarActionPerformed
         if (!textUsuario.getText().isEmpty() && !textIPServidor.getText().isEmpty()) {
             this.usuario = textUsuario.getText();
             this.servidorIP = textIPServidor.getText();
 
-            System.out.println("conectar a servidor");
+            try {
+                Registry registry = LocateRegistry.getRegistry(servidorIP, 1234);
+                chatServer = (ServerInterface) registry.lookup("ChatServer");
+                client = new MatrixMultiplierClient(usuario, chatServer);
+                client.setPanelsListeners(pnlPreviewMatriz, panelMatrizA, panelMatrizB, pnlContenedorHilos);
+                client.setNumHilos(4);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Conectado al servidor");
+            this.btnConectar.setEnabled(false);
+            this.btnDesonectar.setEnabled(true);
         }
-    }//GEN-LAST:event_btnComenzarActionPerformed
+    }//GEN-LAST:event_btnConectarActionPerformed
 
     private void sliderNumHilosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderNumHilosStateChanged
         this.lblNumHilos.setText("Numero de hilos: " + sliderNumHilos.getValue());
@@ -224,6 +247,16 @@ public class ClienteUI extends javax.swing.JFrame {
             Logger.getLogger(ClienteUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnDesonectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesonectarActionPerformed
+        try {
+            client.disconect();
+            this.btnDesonectar.setEnabled(false);
+            this.btnConectar.setEnabled(true);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClienteUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDesonectarActionPerformed
 
     public static void main(String args[]) {
 
@@ -254,7 +287,8 @@ public class ClienteUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnComenzar;
+    private javax.swing.JButton btnConectar;
+    private javax.swing.JButton btnDesonectar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
