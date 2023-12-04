@@ -1,18 +1,11 @@
 package rmi;
 
-import interfaz.ServerInterface;
 import interfaz.UserInterface;
-import java.io.Serializable;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;

@@ -51,7 +51,6 @@ public class ServerUI extends javax.swing.JFrame {
         pnlLateral = new javax.swing.JPanel();
         pnlAlgoritmos = new javax.swing.JPanel();
         radioSecuencial = new javax.swing.JRadioButton();
-        radioBloques = new javax.swing.JRadioButton();
         radioFilas = new javax.swing.JRadioButton();
         pnlConfiguracion = new javax.swing.JPanel();
         btnDelMatrizB = new javax.swing.JButton();
@@ -96,19 +95,8 @@ public class ServerUI extends javax.swing.JFrame {
         });
         pnlAlgoritmos.add(radioSecuencial, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 300, -1));
 
-        radioBloques.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        radioBloques.setText("Algoritmo por Bloques");
-        radioBloques.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        radioBloques.setFocusPainted(false);
-        radioBloques.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radioBloquesActionPerformed(evt);
-            }
-        });
-        pnlAlgoritmos.add(radioBloques, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 300, -1));
-
         radioFilas.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        radioFilas.setText("Concurrente Por Filas");
+        radioFilas.setText("Procesamiento Concurrente");
         radioFilas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         radioFilas.setFocusPainted(false);
         radioFilas.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +106,7 @@ public class ServerUI extends javax.swing.JFrame {
         });
         pnlAlgoritmos.add(radioFilas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 300, -1));
 
-        pnlLateral.add(pnlAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 120));
+        pnlLateral.add(pnlAlgoritmos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 90));
 
         pnlConfiguracion.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Configuracion", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlConfiguracion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -213,7 +201,7 @@ public class ServerUI extends javax.swing.JFrame {
         jList1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jScrollPane1.setViewportView(jList1);
 
-        pnlLateral.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 330, 210));
+        pnlLateral.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 330, 240));
 
         jPanel1.add(pnlLateral, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, 370, 690));
 
@@ -226,10 +214,6 @@ public class ServerUI extends javax.swing.JFrame {
     private void radioSecuencialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSecuencialActionPerformed
 
     }//GEN-LAST:event_radioSecuencialActionPerformed
-
-    private void radioBloquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBloquesActionPerformed
-
-    }//GEN-LAST:event_radioBloquesActionPerformed
 
     private void radioFilasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioFilasActionPerformed
 
@@ -288,19 +272,7 @@ public class ServerUI extends javax.swing.JFrame {
 
     private void panelMatrizAMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMatrizAMousePressed
         try {
-            int[][] matriz = chatServer.getMatrizA(filas, columnas);
-            pnlPreviewMatriz.setMatriz(matriz);
-
-            int filas = matriz.length;
-            int columnas = matriz[0].length;
-
-            for (int i = 0; i < filas; i++) {
-                for (int j = 0; j < columnas; j++) {
-                    System.out.print(matriz[i][j] + " ");
-                }
-                System.out.println();
-            }
-
+            pnlPreviewMatriz.setMatriz(chatServer.getMatrizA(filas, columnas));
         } catch (RemoteException ex) {
             Logger.getLogger(ServerUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -415,7 +387,6 @@ public class ServerUI extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMatrizA;
     private javax.swing.JPanel pnlMatrizB;
     private componentes.PreviewPanel pnlPreviewMatriz;
-    private javax.swing.JRadioButton radioBloques;
     private javax.swing.JRadioButton radioFilas;
     private javax.swing.JRadioButton radioSecuencial;
     // End of variables declaration//GEN-END:variables

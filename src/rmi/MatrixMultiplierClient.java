@@ -13,8 +13,6 @@ import javax.swing.SwingWorker;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -92,7 +90,7 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
                 String[] nuevoTiempo = {algoritmo, convertirTiempo(tiempoEjecucion), String.valueOf(tiempoEjecucion)};
                 tiemposEjecucion.add(nuevoTiempo);
 
-                JOptionPane.showMessageDialog(null, "Tiempo de ejecucion: " + convertirTiempo(tiempoEjecucion));
+//                JOptionPane.showMessageDialog(null, "Tiempo de ejecucion: " + convertirTiempo(tiempoEjecucion));
                 return newResult;
             }
         };
