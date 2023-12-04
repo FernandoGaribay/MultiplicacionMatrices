@@ -5,13 +5,20 @@ import componentes.PreviewPanel;
 import componentes.panelMatriz;
 import interfaz.ProgresoListener;
 import interfaz.ServerInterface;
+import interfaz.UserInterface;
 import java.rmi.RemoteException;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class MatrixMultiplierClient extends UnicastRemoteObject implements interfaz.UserInterface, ProgresoListener {
 
@@ -35,6 +42,7 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
     private int numHilos;
 
     // Credenciales
+    private JList listUsers;
     private String name;
     private ServerInterface chatServer;
 
@@ -141,6 +149,22 @@ public class MatrixMultiplierClient extends UnicastRemoteObject implements inter
         this.previewPanel = previewPanel;
         this.panelA = panelA;
         this.panelB = panelB;
+    }
+
+    public void updateClientList(List<UserInterface> clients) throws RemoteException {
+        SwingUtilities.invokeLater(() -> {
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+
+            for (UserInterface client : clients) {
+                try {
+                    listModel.addElement(client.getName());
+                } catch (RemoteException ex) {
+                    ex.getMessage();
+                }
+            }
+
+            listUsers.setModel(listModel);
+        });
     }
 
     @Override

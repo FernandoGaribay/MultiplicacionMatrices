@@ -33,6 +33,7 @@ public class ServerUI extends javax.swing.JFrame {
             registry = LocateRegistry.createRegistry(1234);
 
             chatServer = new MatrixMultiplierServer();
+            chatServer.setListUsers(jList1);
             registry.rebind("ChatServer", chatServer);
             System.out.println("ChatServer ready at " + ipAddress + "\n");
 
@@ -209,11 +210,7 @@ public class ServerUI extends javax.swing.JFrame {
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Usuarios Conectados", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jList1.setBackground(new java.awt.Color(242, 242, 242));
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jList1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jScrollPane1.setViewportView(jList1);
 
         pnlLateral.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 330, 210));

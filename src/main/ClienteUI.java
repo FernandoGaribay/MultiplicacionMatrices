@@ -127,7 +127,7 @@ public class ClienteUI extends javax.swing.JFrame {
         pnlMonitor.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblNumHilos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblNumHilos.setText("Numero de hilos: 1");
+        lblNumHilos.setText("Numero de hilos: 3");
         pnlMonitor.add(lblNumHilos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 25, 290, 20));
 
         sliderNumHilos.setMajorTickSpacing(2);

@@ -22,4 +22,5 @@ public interface UserInterface extends Remote {
     void recibirMatrices(int inicio, int fin, int filas, int columnas) throws RemoteException;
 
     void setNumHilos(int numHilos) throws RemoteException;
+    
 }

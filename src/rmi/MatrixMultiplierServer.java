@@ -13,12 +13,16 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.SwingUtilities;
 
 public class MatrixMultiplierServer extends UnicastRemoteObject implements interfaz.ServerInterface {
 
     private List<UserInterface> connectedUsers;
     private List<int[][]> matricesParciales;
     private int respuestasRecibidas;
+    private JList listUsers;
 
     private int filas, columnas;
     private int[][] resul;
@@ -31,6 +35,11 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
         connectedUsers = new ArrayList<>();
         matricesParciales = new ArrayList<>();
         respuestasRecibidas = 0;
+    }
+
+    @Override
+    public void setListUsers(JList listUsers) throws RemoteException {
+        this.listUsers = listUsers;
     }
 
     @Override
@@ -73,6 +82,19 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
     @Override
     public void connectUser(UserInterface usuario) throws RemoteException {
         this.connectedUsers.add(usuario);
+        SwingUtilities.invokeLater(() -> {
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+
+            for (UserInterface client : connectedUsers) {
+                try {
+                    listModel.addElement(client.getName());
+                } catch (RemoteException ex) {
+                    ex.getMessage();
+                }
+            }
+
+            listUsers.setModel(listModel);
+        });
         System.out.println("-> Usuario: " + usuario.getName() + " conectado.");
     }
 

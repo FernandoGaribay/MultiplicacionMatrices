@@ -3,6 +3,7 @@ package interfaz;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import javax.swing.JList;
 
 public interface ServerInterface extends Remote {
 
@@ -25,5 +26,7 @@ public interface ServerInterface extends Remote {
     int[][] obtenerMatrizResultante() throws RemoteException;
 
     int[][] getResul() throws RemoteException;
+    
+    void setListUsers(JList listUsers) throws RemoteException;
 
 }
