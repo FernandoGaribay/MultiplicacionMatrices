@@ -16,6 +16,7 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
     private List<int[][]> matricesParciales;
     private int respuestasRecibidas;
     private JList listUsers;
+    private int lastLenght = 0;
 
     private int filas, columnas;
     private int[][] resul;
@@ -91,6 +92,7 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
         System.out.println("-> Usuario: " + usuario.getName() + " conectado.");
     }
 
+    @Override
     public void disconnectUser(UserInterface usuario) throws RemoteException {
         this.connectedUsers.remove(usuario);
         SwingUtilities.invokeLater(() -> {
@@ -130,17 +132,29 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
 
     @Override
     public int[][] obtenerMatrizResultante() throws RemoteException {
-        System.out.println("Filas: " + filas);
-        System.out.println("Columnas: " + columnas);
-
         int[][] matrizResultante = new int[filas][columnas];
 
-        for (int[][] matrizParcial : matricesParciales) {
-            for (int i = 0; i < matrizParcial.length; i++) {
-                for (int j = 0; j < matrizParcial[0].length; j++) {
-                    matrizResultante[i][j] += matrizParcial[i][j];
+        System.out.println("-> Filas: " + filas);
+        System.out.println("-> Columnas: " + columnas);
+
+        if (lastLenght < filas) {
+            for (int[][] matrizParcial : matricesParciales) {
+                for (int i = 0; i < matrizParcial.length; i++) {
+                    for (int j = 0; j < matrizParcial[0].length; j++) {
+                        matrizResultante[i][j] += matrizParcial[i][j];
+                    }
                 }
             }
+            lastLenght = filas;
+        } else {
+            for (int[][] matrizParcial : matricesParciales) {
+                for (int i = 0; i < filas; i++) {
+                    for (int j = 0; j < columnas; j++) {
+                        matrizResultante[i][j] += matrizParcial[i][j];
+                    }
+                }
+            }
+            lastLenght = filas;
         }
 
         return matrizResultante;

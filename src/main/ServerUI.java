@@ -36,6 +36,7 @@ public class ServerUI extends javax.swing.JFrame {
         tiemposEjecucion = new ArrayList<String[]>();
         try {
             String ipAddress = "192.168.1.87";
+//            String ipAddress = JOptionPane.showInputDialog( "Ingrese la dirección del servidor: ");
             System.setProperty("java.rmi.server.hostname", ipAddress);
             registry = LocateRegistry.createRegistry(1234);
 
@@ -258,7 +259,7 @@ public class ServerUI extends javax.swing.JFrame {
         if (!tiemposEjecucion.isEmpty()) {
             StringBuilder mensaje = new StringBuilder();
             for (String[] tiempo : tiemposEjecucion) {
-                mensaje.append(tiempo[0]); // Agrega el nombre del algoritmo
+                mensaje.append(tiempo[0]); // Agrega el numero de clientes
                 mensaje.append(" -> ");
                 mensaje.append(tiempo[1]); // Agrega el tiempo
                 mensaje.append(" (");
@@ -288,7 +289,7 @@ public class ServerUI extends javax.swing.JFrame {
             ExecutorService executor = Executors.newFixedThreadPool(totalClients);
             long tiempoInicial = System.currentTimeMillis();
             for (int i = 0; i < totalClients; i++) {
-                final int currentRows = rowsPerClient;  // Hacer final la variable local
+                final int currentRows = rowsPerClient;  // Hacer final la variable local ya que se inicializara en cada ciclo
 
                 int updatedRows = currentRows;  // Utilizar una nueva variable no final para almacenar el valor actualizado
 
@@ -305,7 +306,7 @@ public class ServerUI extends javax.swing.JFrame {
                 final int finalAssignedRows = assignedRows;  // Crear una variable final adicional
                 final int finalUpdatedRows = updatedRows;
 
-                // Utilizar Callable para ejecutar la lógica y devolver un resultado
+                // Utilizar Callable para ejecutar la logica y devolver un resultado
                 Callable<Void> task = () -> {
                     chatServer.mandarMatrices(finalAssignedRows, (finalAssignedRows + finalUpdatedRows - 1), filas, columnas, usuario);
                     return null;
@@ -339,18 +340,9 @@ public class ServerUI extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if (registry != null) {
             try {
-                // Desvincula el objeto del registro antes de cerrar el registro
                 registry.unbind("ChatServer");
-            } catch (Exception e) {
-                // Maneja cualquier excepción que pueda ocurrir al desvincular
-                e.printStackTrace();
-            }
-
-            try {
-                // Cierra el registro
                 UnicastRemoteObject.unexportObject(registry, true);
             } catch (Exception e) {
-                // Maneja cualquier excepción que pueda ocurrir al cerrar el registro
                 e.printStackTrace();
             }
         }
