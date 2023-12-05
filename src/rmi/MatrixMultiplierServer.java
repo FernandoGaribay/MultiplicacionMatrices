@@ -117,7 +117,7 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
     }
 
     @Override
-    public void recibirMatrizParcial(int[][] matrizParcial, int inicio, int fin) throws RemoteException {
+    public synchronized void recibirMatrizParcial(int[][] matrizParcial, int inicio, int fin) throws RemoteException {
         matricesParciales.add(matrizParcial);
         respuestasRecibidas++;
 
@@ -167,6 +167,10 @@ public class MatrixMultiplierServer extends UnicastRemoteObject implements inter
 
     @Override
     public void resetResul() {
+        matricesParciales = new ArrayList<>();
+        respuestasRecibidas = 0;
+        filas = 0;
+        columnas  = 0;
         this.resul = null;
     }
 

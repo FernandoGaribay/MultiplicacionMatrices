@@ -281,7 +281,7 @@ public class ServerUI extends javax.swing.JFrame {
             int remainingRows = filas % totalClients;
 
             int assignedRows = 0;
-
+            chatServer.resetResul();
             // Lista para almacenar los resultados futuros
             List<Future<Void>> futures = new ArrayList<>();
 
