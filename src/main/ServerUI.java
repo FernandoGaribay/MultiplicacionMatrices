@@ -35,8 +35,8 @@ public class ServerUI extends javax.swing.JFrame {
         objPopup = new PopupGenMatriz();
         tiemposEjecucion = new ArrayList<String[]>();
         try {
-            String ipAddress = "192.168.1.87";
-//            String ipAddress = JOptionPane.showInputDialog( "Ingrese la dirección del servidor: ");
+//            String ipAddress = "192.168.1.87";
+            String ipAddress = JOptionPane.showInputDialog( "Ingrese la dirección del servidor: ");
             System.setProperty("java.rmi.server.hostname", ipAddress);
             registry = LocateRegistry.createRegistry(1234);
 

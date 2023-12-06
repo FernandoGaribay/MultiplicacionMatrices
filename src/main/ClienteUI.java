@@ -24,18 +24,18 @@ public class ClienteUI extends javax.swing.JFrame {
         this.usuario = "";
         this.servidorIP = "";
 
-        try {
-            String name = "fer";
-            String serverIP = "192.168.1.87";
-            Registry registry = LocateRegistry.getRegistry(serverIP, 1234);
-
-            chatServer = (ServerInterface) registry.lookup("ChatServer");
-            client = new MatrixMultiplierClient(name, chatServer);
-            client.setPanelsListeners(pnlPreviewMatriz, panelMatrizA, panelMatrizB, pnlContenedorHilos);
-            client.setNumHilos(4);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String name = "fer";
+//            String serverIP = "192.168.1.87";
+//            Registry registry = LocateRegistry.getRegistry(serverIP, 1234);
+//
+//            chatServer = (ServerInterface) registry.lookup("ChatServer");
+//            client = new MatrixMultiplierClient(name, chatServer);
+//            client.setPanelsListeners(pnlPreviewMatriz, panelMatrizA, panelMatrizB, pnlContenedorHilos);
+//            client.setNumHilos(4);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @SuppressWarnings("unchecked")

@@ -5,11 +5,8 @@
         <group>
             <file>file:/C:/Users/garib/OneDrive/Escritorio/MultiplicacionMatrices/src/interfaz/ServerInterface.java</file>
             <file>file:/C:/Users/garib/OneDrive/Escritorio/MultiplicacionMatrices/src/main/Main.java</file>
-            <file>file:/C:/Users/garib/OneDrive/Escritorio/MultiplicacionMatrices/src/interfaz/UserInterface.java</file>
             <file>file:/C:/Users/garib/OneDrive/Escritorio/MultiplicacionMatrices/src/main/ServerUI.java</file>
             <file>file:/C:/Users/garib/OneDrive/Escritorio/MultiplicacionMatrices/src/rmi/MatrixMultiplierServer.java</file>
-            <file>file:/C:/Users/garib/OneDrive/Escritorio/MultiplicacionMatrices/src/main/Concurrente.java</file>
-            <file>file:/C:/Users/garib/OneDrive/Escritorio/MultiplicacionMatrices/src/rmi/MatrixMultiplierClient.java</file>
             <file>file:/C:/Users/garib/OneDrive/Escritorio/MultiplicacionMatrices/src/main/ClienteUI.java</file>
         </group>
     </open-files>
